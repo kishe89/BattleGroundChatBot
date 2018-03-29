@@ -3,6 +3,12 @@
 
 # Usage
 
+1. k_edit branch 생성-> 작업(함수단위) branch 작성 branch 이름은 k_edit_작업이름
+
+   y_edit branch 생성-> 작업(함수단위) branch 작성 branch 이름은 y_edit_작업이름
+2. 작업 branch 를 본인 이름_edit branch 에 merge 하고 마스터 브랜치로 pull request
+
+
 
 # LICENSE
 ```
