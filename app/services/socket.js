@@ -20,6 +20,7 @@
     renderMessage(message,MY_MESSAGE);
     socket.emit('message-public',message);
   };
+
   function renderMessage(message,mode) {
     const messageList = document.getElementById("message-area");
     const message_row = document.createElement("div");
