@@ -36,7 +36,12 @@
     }
 
     messageList.appendChild(message_row);
+    scrollToBottom();
   };
+  function scrollToBottom() {
+    var messageArea = document.getElementById("message-area");
+    messageArea.scrollTop = messageArea.scrollHeight;
+  }
   document.getElementById("messageSend").addEventListener("click", function(){
     sendMessage(socket);
   });
