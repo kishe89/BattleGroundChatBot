@@ -3,3 +3,36 @@ body,html{
     height: 100%;
     overflow: hidden;
 }
+.login-form-container{
+    display: block;
+    margin-left: 25%;
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    margin-top: 16%;
+    background: #605bff;
+}
+.nickInput{
+    display: block;
+    position: relative;
+    width: 25%;
+    height: 2%;
+    margin-left: 25%;
+    margin-top: 20px;
+}
+.passwordInput{
+    display: block;
+    position: relative;
+    width: 25%;
+    height: 2%;
+    margin-left: 25%;
+    margin-top: 20px;
+}
+.loginButton{
+    display: block;
+    position: relative;
+    width: 25%;
+    height: 2%;
+    margin-left: 25%;
+    margin-top: 20px;
+}

@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>배틀그라운드 마스터</title>
+    <link rel="stylesheet" type="text/css" href="./app/css/login.css">
 </head>
 <body>
-
+<div class = "login-form-container">
+    <h3>Please Sing In</h3>
+    <div class="nickInput">
+        <input id="nickInput" type="text" placeholder="Please Input Your ID">
+    </div>
+    <div class="loginButton">
+        <input id="loginButton" type="button" value="Login">
+    </div>
+</div>
 </body>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="./app/services/login.js"></script>
 </html>
