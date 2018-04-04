@@ -11,7 +11,7 @@
     const socket = require('socket.io-client')('http://192.168.0.2:3000',{
       transports: ['websocket'],
       query:{
-        id:id,
+        id:id.id,
         nickName:'kjw',
         authOrg:'facebook'
       }
@@ -80,8 +80,11 @@
   function connectToBotSocket(id) {
     const socket = require('socket.io-client')('http://192.168.0.2:3000/bot',{
       transports: ['websocket'],
-      query:id,
-      forceNew: true
+      query:{
+        id:id,
+        nickName:'kjw',
+        authOrg:'facebook'
+      }
     });
 
     //mode value
