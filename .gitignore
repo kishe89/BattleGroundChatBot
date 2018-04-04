@@ -67,3 +67,4 @@ typings/
 /init
 /credentials/*
 /init/*
+server/
