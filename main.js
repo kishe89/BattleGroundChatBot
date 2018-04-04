@@ -7,6 +7,7 @@ let chatWin;
 function createLoginWindow() {
   const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
 
+
   /**
    * @TODO mobile, desktop 별 modal 화면 크기 조정 별도 로직 필요
    */
@@ -24,6 +25,7 @@ function createLoginWindow() {
     protocol: 'file:',
     slashes: true
   }));
+
   // Open the DevTools.
   win.webContents.openDevTools();
 
@@ -80,26 +82,24 @@ app.on('activate', () => {
     if (win === null) {
         createWindow()
     }
-})
+});
 
 ipcMain.on('login',(event,args)=>{
   /**
    * @TODO validation logic
    */
-  console.log(args);
   win.webContents.send('login_success',args);
 });
 ipcMain.on('changeView',(event,id)=>{
-  console.log(id);
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }));
   // Open the DevTools.
+
   win.webContents.openDevTools();
   win.webContents.on('did-finish-load',()=>{
-    console.log(id);
     win.webContents.send('connect',id);
   });
 });
