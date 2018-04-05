@@ -8,23 +8,32 @@
 <body>
 
 <!--Message list area Start-->
-
-<div class="message-area" id="message-area">
-    <div class="my-message-block">나는 더 먹고 싶다. 안녕 베이비
-        나는 언제나 너와 함께야</div>
-    <div class="another-message-block">너는 너무 나한테 잘해줘. 내 사랑 시발</div>
+<div class="room-area" id="room-area">
+    <div class="room-item" id="bot-room" >
+        <p>Chat Bot</p>
+    </div>
+    <div class="room-create" id="createRoom" >
+        <img class="room-create-image" src="public/images/plus-button.svg"/>
+    </div>
 </div>
+<div class="chat-container" id="chat-container">
+    <div class="message-area" id="message-area">
+        <div class="my-message-block">나는 더 먹고 싶다. 안녕 베이비
+            나는 언제나 너와 함께야</div>
+        <div class="another-message-block">너는 너무 나한테 잘해줘. 내 사랑 시발</div>
+    </div>
 
-<!--Message list area End-->
+    <!--Message list area End-->
 
-<!--Input Area Start-->
+    <!--Input Area Start-->
 
-<div class="input-wrapper">
-    <textarea class="message-input" id="messageInput"></textarea>
-    <div class="message-send" id="messageSend"></div>
+    <div class="input-wrapper">
+        <textarea class="message-input" id="messageInput"></textarea>
+        <div class="message-send" id="messageSend"></div>
+    </div>
+
+    <!--Input Area End-->
 </div>
-
-<!--Input Area End-->
 
 </body>
 <script src="./app/services/socket.js"></script>

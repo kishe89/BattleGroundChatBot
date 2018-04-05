@@ -3,7 +3,7 @@ const {app, net,BrowserWindow,ipcMain} = electron;
 const path = require('path');
 const url = require('url');
 let win;
-let chatWin;
+let modalWin;
 function createLoginWindow() {
   const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
 
@@ -17,7 +17,8 @@ function createLoginWindow() {
   };
 
   // Create the browser window.
-  win = new BrowserWindow({width: width/2, height: height/2,modal:true,webPreferences:webPreference});
+  console.log(width);
+  win = new BrowserWindow({width: 800,minWidth:600, height: height/2,fullscreenWindowTitle:true,webPreferences:webPreference});
 
   // and load the index.html of the app.
   win.loadURL(url.format({
@@ -29,6 +30,19 @@ function createLoginWindow() {
   // Open the DevTools.
   win.webContents.openDevTools();
 
+  win.on('enter-full-screen',(event)=>{
+    console.log('win : enter-full-screen');
+    if(modalWin)
+    modalWin.maximize();
+  });
+  win.on('maximize',(event)=>{
+    console.log('win : maximize');
+    if(modalWin)
+    modalWin.maximize();
+  });
+  win.on('enter-html-full-screen',(event)=>{
+    console.log('win : enter-html-full-screen');
+  });
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -96,11 +110,20 @@ ipcMain.on('changeView',(event,id)=>{
     protocol: 'file:',
     slashes: true
   }));
-  // Open the DevTools.
-
-  win.webContents.openDevTools();
   win.webContents.on('did-finish-load',()=>{
     win.webContents.send('connect',id);
+  });
+});
+ipcMain.on('createRoom_modal_view',()=>{
+  console.log('createRoom_modal_view');
+  const {width,height} = win.getSize();
+  modalWin = new BrowserWindow({width:width,height:height,modal:true,parent:win,center:true});
+  modalWin.on('resize',(event)=>{
+    const size = event.sender.getSize();
+    win.setSize(size[0],size[1]);
+  });
+  modalWin.on('closed',()=>{
+    modalWin = null;
   });
 });
 // In this file you can include the rest of your app's specific main process
