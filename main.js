@@ -3,7 +3,6 @@ const {app, net,BrowserWindow,ipcMain} = electron;
 const path = require('path');
 const url = require('url');
 let win;
-let modalWin;
 function createLoginWindow() {
   const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
 
@@ -18,7 +17,16 @@ function createLoginWindow() {
 
   // Create the browser window.
   console.log(width);
-  win = new BrowserWindow({width: 800,minWidth:600, height: height/2,fullscreenWindowTitle:true,webPreferences:webPreference});
+  win = new BrowserWindow({
+    width: 600,
+    minWidth:600,
+    maxWidth:600,
+    height: 600,
+    minHeight:600,
+    maxHeight:600,
+    fullscreenWindowTitle:true,
+    webPreferences:webPreference
+  });
 
   // and load the index.html of the app.
   win.loadURL(url.format({
@@ -32,13 +40,9 @@ function createLoginWindow() {
 
   win.on('enter-full-screen',(event)=>{
     console.log('win : enter-full-screen');
-    if(modalWin)
-    modalWin.maximize();
   });
   win.on('maximize',(event)=>{
     console.log('win : maximize');
-    if(modalWin)
-    modalWin.maximize();
   });
   win.on('enter-html-full-screen',(event)=>{
     console.log('win : enter-html-full-screen');
@@ -105,6 +109,7 @@ ipcMain.on('login',(event,args)=>{
   win.webContents.send('login_success',args);
 });
 ipcMain.on('changeView',(event,id)=>{
+  win.setMinimumSize(600,600);
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
@@ -114,17 +119,6 @@ ipcMain.on('changeView',(event,id)=>{
     win.webContents.send('connect',id);
   });
 });
-ipcMain.on('createRoom_modal_view',()=>{
-  console.log('createRoom_modal_view');
-  const {width,height} = win.getSize();
-  modalWin = new BrowserWindow({width:width,height:height,modal:true,parent:win,center:true});
-  modalWin.on('resize',(event)=>{
-    const size = event.sender.getSize();
-    win.setSize(size[0],size[1]);
-  });
-  modalWin.on('closed',()=>{
-    modalWin = null;
-  });
-});
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
