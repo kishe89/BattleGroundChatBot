@@ -20,10 +20,9 @@ function createLoginWindow() {
   win = new BrowserWindow({
     width: 600,
     minWidth:600,
-    maxWidth:600,
     height: 600,
     minHeight:600,
-    maxHeight:600,
+    resizable:false,
     fullscreenWindowTitle:true,
     webPreferences:webPreference
   });
@@ -34,9 +33,6 @@ function createLoginWindow() {
     protocol: 'file:',
     slashes: true
   }));
-
-  // Open the DevTools.
-  win.webContents.openDevTools();
 
   win.on('enter-full-screen',(event)=>{
     console.log('win : enter-full-screen');
@@ -56,30 +52,6 @@ function createLoginWindow() {
     win = null;
     app.quit();
   });
-}
-function createWindow () {
-
-    const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
-    // Create the browser window.
-    win = new BrowserWindow({width: width, height: height});
-
-    // and load the index.html of the app.
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-    // Open the DevTools.
-    win.webContents.openDevTools();
-
-    // Emitted when the window is closed.
-    win.on('closed', () => {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        console.log('window closed');
-        win = null;
-    });
 };
 
 app.on('ready', createLoginWindow);
@@ -91,14 +63,14 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
-})
+});
 
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     console.log('activate');
     if (win === null) {
-        createWindow()
+        createLoginWindow();
     }
 });
 
@@ -109,12 +81,12 @@ ipcMain.on('login',(event,args)=>{
   win.webContents.send('login_success',args);
 });
 ipcMain.on('changeView',(event,id)=>{
-  win.setMinimumSize(600,600);
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }));
+  win.setResizable(true);
   win.webContents.on('did-finish-load',()=>{
     win.webContents.send('connect',id);
   });
