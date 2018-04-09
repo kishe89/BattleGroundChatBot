@@ -24,11 +24,14 @@
   function changeView(id) {
     ipcRenderer.send('changeView',id);
   };
-  if(document.getElementById("loginButton")){
-    document.getElementById("loginButton").addEventListener("click", function(){
-      const id = document.getElementById("nickInput").value;
-      console.log(id);
-      ipcRenderer.send('login',{id:id});
+  if(document.getElementById("SignInButton")){
+    document.getElementById("SignInButton").addEventListener("click", function(){
+      /**
+       * @TODO Oauth 로 전달받은 AppId 로 변경해야함 그전까진 임의값세팅
+       */
+      // const id = document.getElementById("nickInput").value;
+      // console.log(id);
+      ipcRenderer.send('login',{id:'1234'});
     });
   }
 })();

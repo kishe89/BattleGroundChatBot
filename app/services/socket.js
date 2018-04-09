@@ -2,7 +2,7 @@
 (()=>{
   const electron = require("electron");
   const ipcRenderer = electron.ipcRenderer;
-  const url = 'http://192.168.0.27:3000';
+  const url = 'http://192.168.0.2:3000';
   const nsp = '/bot';
   const boturl = url+nsp;
   //mode value
