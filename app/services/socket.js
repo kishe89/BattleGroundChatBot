@@ -2,7 +2,7 @@
 (()=>{
   const electron = require("electron");
   const ipcRenderer = electron.ipcRenderer;
-  const url = 'http://192.168.0.2:3000';
+  const url = 'http://192.168.0.22:3000';
   const nsp = '/bot';
   const boturl = url+nsp;
   //mode value
@@ -23,7 +23,7 @@
     const element = document.getElementById(elementId);
 
     if (element.classList) {
-      element.classList.toggle(className);
+      console.log('toggled : '+element.classList.toggle(className));
     } else {
       // For IE9
       const classes = element.className.split(" ");
@@ -52,7 +52,7 @@
     li.style.transform       = 'rotate('+d+'deg)';
   };
   function toggleOptions(elementId) {
-    const angleStart = -360;
+    const angleStart = 360;
     const element = document.getElementById(elementId);
     const ratingDiv = document.getElementById('modal-input-rating');
     toggleClass('modal-input-rating','open');
@@ -62,35 +62,41 @@
         liList.push(item);
       }
     });
-
     const classes = ratingDiv.className.split(" ");
-    // const deg = classes.indexOf('half') ? 180/(liList.length-1) : 360/liList.length;
-    const deg = 360/liList.length;
+    const deg = -360/liList.length;
     for(let index = 0; index<liList.length; index++){
       const d = index*deg;
       classes.indexOf('open') ? rotate(liList[index],d) : rotate(liList[index],angleStart);
     }
-    // var deg = $(s).hasClass('half') ? 180/(li.length-1) : 360/li.length;
-    // for(var i=0; i<li.length; i++) {
-    //   var d = $(s).hasClass('half') ? (i*deg)-90 : i*deg;
-    //   $(s).hasClass('open') ? rotate(li[i],d) : rotate(li[i],angleStart);
-    // }
   };
   function createRoom() {
     const modal = document.getElementById('myModal');
+    const modal_input_rating = document.getElementById('rating-ul').childNodes;
     modal.style.display = 'block';
     document.addEventListener('keydown',(event)=>{
       const keyName = event.key;
       if(keyName === 'Escape' && modal !== null){
-        modal.style.display = 'none'
+        modal.style.display = 'none';
+        toggleClass('modal-input-rating','open');
+        modal_input_rating.forEach((node,index)=>{
+          if(index%2 !== 0){
+            node.style.transform = 'none';
+          }
+        });
       }
     });
     window.onclick = (event)=>{
       if (event.target === modal) {
         modal.style.display = "none";
+        toggleClass('modal-input-rating','open');
+        modal_input_rating.forEach((node,index)=>{
+          if(index%2 !== 0){
+            node.style.transform = 'none';
+
+          }
+        });
       }
     };
-
     setTimeout(function() { toggleOptions('rating-ul'); }, 100);
     const roomList = document.getElementById('room-area');
     const createRoomButton = roomList.lastElementChild;
@@ -112,17 +118,22 @@
   function renderMessage(message,mode) {
     const messageList = document.getElementById('message-area');
     const message_row = document.createElement('div');
+    const message_content = document.createElement('div');
+    const profile_img = document.createElement('img');
     switch (mode){
       case MY_MESSAGE:
         message_row.className = 'my-message-block';
-        message_row.innerText = message;
+        message_content.innerText = message;
+        message_content.className = 'my-message-block-message';
+        profile_img.className = 'my-message-block-profile';
         break;
       case ANOTHER_MESSAGE:
         message_row.className = 'another-message-block';
         message_row.innerText = message;
         break;
     }
-
+    message_row.appendChild(message_content);
+    message_row.appendChild(profile_img);
     messageList.appendChild(message_row);
     scrollToBottom('message-area');
   };

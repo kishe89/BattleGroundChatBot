@@ -33,7 +33,7 @@ function createLoginWindow() {
     protocol: 'file:',
     slashes: true
   }));
-
+  win.webContents.openDevTools();
   win.on('enter-full-screen',(event)=>{
     console.log('win : enter-full-screen');
   });
