@@ -19,7 +19,7 @@
     renderer: 'svg', // Required
     loop: true, // Optional
     autoplay: true, // Optional
-    name: "Hello World", // Name for future reference. Optional.
+    name: "radar", // Name for future reference. Optional.
   });
   function changeView(id) {
     ipcRenderer.send('changeView',id);

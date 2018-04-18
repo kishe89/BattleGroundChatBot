@@ -15,8 +15,10 @@ body,html{
     background: url("../../public/images/login_bg.jpg");
 }
 #lottie{
+    margin-top: 10%;
     width: 100%;
-    height: 50%;
+    height: 15%;
+    opacity: 0.4;
 }
 @keyframes bodyBackgroundAnimation {
     0%{
@@ -75,7 +77,10 @@ body,html{
     width:28%;
     position: relative;
     overflow: hidden;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
+    margin-top: 25%;
+    margin-left: auto;
+    margin-right: auto;
     color: #ffffff;
     border-right: .20em solid darkturquoise; /* The typwriter cursor */
     white-space: nowrap; /* Keeps the content on a single line */
