@@ -13,80 +13,81 @@
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-title">
-            <p>방 이름과 레이팅을 적어주세요!!</p>
+            <p>스쿼드 방 만들기</p>
         </div>
         <div class="modal-input">
-            <p>방이름 입력 영역</p>
+            <input placeholder="방이름 입력 영역" id="modal-input-roomName"/>
         </div>
         <div class="modal-input-rating" id="modal-input-rating">
             <button>Rating</button>
             <ul id = "rating-ul">
                 <li>
                     <input type="checkbox" id="1"/>
-                    <label for='1'>Option 1</label>
+                    <label for='1'>1000점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="2"/>
-                    <label for='2'>Option 2</label>
+                    <label for='2'>1100점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="3"/>
-                    <label for='3'>Option 3</label>
+                    <label for='3'>1200점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="4"/>
-                    <label for='4'>Option 4</label>
+                    <label for='4'>1300점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="5"/>
-                    <label for='5'>Option 5</label>
+                    <label for='5'>1400점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="6"/>
-                    <label for='6'>Option 6</label>
+                    <label for='6'>1500점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="7"/>
-                    <label for='7'>Option 7</label>
+                    <label for='7'>1600점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="8"/>
-                    <label for='8'>Option 8</label>
+                    <label for='8'>1700점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="9"/>
-                    <label for='9'>Option 9</label>
+                    <label for='9'>1800점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="10"/>
-                    <label for='10'>Option 10</label>
+                    <label for='10'>1900점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="11"/>
-                    <label for='11'>Option 11</label>
+                    <label for='11'>2000점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="12"/>
-                    <label for='12'>Option 12</label>
+                    <label for='12'>2100점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="13"/>
-                    <label for='13'>Option 13</label>
+                    <label for='13'>2200점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="14"/>
-                    <label for='14'>Option 14</label>
+                    <label for='14'>2300점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="15"/>
-                    <label for='15'>Option 15</label>
+                    <label for='15'>2400점</label>
                 </li>
                 <li>
                     <input type="checkbox" id="16"/>
-                    <label for='16'>Option 16</label>
+                    <label for='16'>2500점</label>
                 </li>
             </ul>
         </div>
+        <div class="modal-input-create" id="modal-input-create">Create Room</div>
     </div>
 
 </div>
@@ -102,14 +103,7 @@
 </div>
 <div class="chat-container" id="chat-container">
     <div class="message-area" id="message-area">
-        <div class="my-message-block">
-            <div class="my-message-block-message">나는 더 먹고 싶다. 안녕 베이비 나는 언제나 너와 함께야</div>
-            <img class="my-message-block-profile"/>
-        </div>
 
-
-
-        <div class="another-message-block">너는 너무 나한테 잘해줘. 내 사랑</div>
     </div>
 
     <!--Message list area End-->
@@ -126,5 +120,5 @@
 
 </body>
 <script src="./app/services/socket.js"></script>
-<script src="./app/services/chat.js"></script>
+<script src="chat.js"></script>
 </html>

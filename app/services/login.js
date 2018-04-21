@@ -31,7 +31,7 @@
        */
       // const id = document.getElementById("nickInput").value;
       // console.log(id);
-      ipcRenderer.send('login',{id:'1234'});
+      ipcRenderer.send('fb-authenticate',"yes");
     });
   }
 })();
