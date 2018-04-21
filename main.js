@@ -2,10 +2,73 @@ const electron = require('electron');
 const {app, net,BrowserWindow,ipcMain} = electron;
 const path = require('path');
 const url = require('url');
+const FB = require('fb');
+const fs = require('fs');
+const axios = require('axios');
+const userProfilePath = path.join(app.getPath('userData'), 'profile.jpeg');
 let win;
+let authwin;
+function createAuthWindow() {
+  const options = {
+    client_id: '197934537654217',
+    scopes: "public_profile",
+    redirect_uri: "https://www.facebook.com/connect/login_success.html"
+  };
+
+  authwin = new BrowserWindow({ width: 450, height: 300, show: false,
+    parent: win, modal: true, webPreferences: {nodeIntegration:false} });
+  const facebookAuthURL = "https://www.facebook.com/v2.8/dialog/oauth?client_id=" + options.client_id + "&redirect_uri=" + options.redirect_uri + "&response_type=token,granted_scopes&scope=" + options.scopes + "&display=popup";
+  authwin.loadURL(facebookAuthURL);
+  authwin.show();
+  authwin.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+    const raw_code = /access_token=([^&]*)/.exec(newUrl) || null;
+    const access_token = (raw_code && raw_code.length > 1) ? raw_code[1] : null;
+    const error = /\?error=(.+)$/.exec(newUrl);
+
+    if(access_token) {
+      FB.setAccessToken(access_token);
+      FB.api('/me', { fields: ['id', 'name', 'picture.width(64).height(64)'] }, function (res) {
+        console.log(res.name);
+        console.log(res.id);
+        console.log(res.picture.data.url);
+        axios({
+          method:'get',
+          url:res.picture.data.url,
+          responseType:'stream'
+        }).then(function(response) {
+          response.data.pipe(fs.createWriteStream(userProfilePath));
+          const args = {
+            id:res.id,
+            name:res.name,
+            picture:userProfilePath
+          };
+          win.webContents.send('login_success',args);
+        });
+      });
+      authwin.close();
+    }
+  });
+  authwin.on('enter-full-screen',(event)=>{
+    console.log('win : enter-full-screen');
+  });
+  authwin.on('maximize',(event)=>{
+    console.log('win : maximize');
+  });
+  authwin.on('enter-html-full-screen',(event)=>{
+    console.log('win : enter-html-full-screen');
+  });
+  // Emitted when the window is closed.
+  authwin.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    console.log('window closed');
+    authwin = null;
+  });
+};
+
 function createLoginWindow() {
   const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
-
 
   /**
    * @TODO mobile, desktop 별 modal 화면 크기 조정 별도 로직 필요
@@ -23,7 +86,8 @@ function createLoginWindow() {
     height: 600,
     minHeight:600,
     resizable:false,
-    fullscreenWindowTitle:true,
+    fullscreenable:false,
+    fullscreenWindowTitle:false,
     webPreferences:webPreference
   });
 
@@ -80,6 +144,13 @@ ipcMain.on('login',(event,args)=>{
    */
   win.webContents.send('login_success',args);
 });
+ipcMain.on('fb-authenticate',(event,args)=>{
+  /**
+   * @TODO validation logic
+   */
+  console.log('')
+  createAuthWindow();
+});
 ipcMain.on('changeView',(event,id)=>{
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -87,6 +158,7 @@ ipcMain.on('changeView',(event,id)=>{
     slashes: true
   }));
   win.setResizable(true);
+  win.setFullScreenable(true);
   win.webContents.on('did-finish-load',()=>{
     win.webContents.send('connect',id);
   });

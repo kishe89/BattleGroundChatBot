@@ -25,7 +25,9 @@
     "babel-preset-es2017": "~6.24.1",
     "socket.io": "~2.0.4",
     "webpack": "~4.3.0",
-    "bodymovin":"~4.13.0"
+    "bodymovin":"~4.13.0",
+    "fb": "~2.0.0",
+    "axios": "~0.18.0"
   },
   "author": "Kim Ji Woon",
   "license": "MIT"

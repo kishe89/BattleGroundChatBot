@@ -21,25 +21,25 @@ body, html {
 
 /* Modal Content */
 .modal-content {
-    position: fixed;
-    left:0;
-    top:0;
-    margin-top: 5%;
-    margin-bottom: 5%;
-    margin-left: 10%;
-    background-color: #fefefe;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+    margin: auto;
+    background-color: #222222;
     border: 2px solid #888;
     border-radius: 8px;
     width: 80%;
-    min-width: 80%;
-    height:90%;
-    min-height:90%;
+    min-width: 550px;
+    height:80%;
+    min-height:550px;
+    max-width: 650px;
+    max-height: 650px;
 }
 .modal-title{
     position:relative;
     width: 80%;
     height: 10%;
-    margin-top: 10%;
+    margin-top: 6%;
     margin-left: 10%;
 }
 .modal-title p{
@@ -49,26 +49,38 @@ body, html {
     height: 100%;
     text-align: center;
     font-family: "Apple SD Gothic Neo";
+    color: #d3e6ff;
     text-decoration-color: #d3e6ff;
     font-size: larger;
 }
 .modal-input{
-    position:fixed;
+    position:relative;
     display: inline-block;
     width: 80%;
     height: 5%;
     top:25%;
     left:10%;
-    background: #35daff;
-    border: 1px solid #605bff;
 
+}
+.modal-input input{
+    position: relative;
+    width: 68%;
+    height: 100%;
+    border-width: 0px;
+    border-radius: 4px;
+    background: #555555;
+    text-align: center;
+    font-size: 18px;
+    color: #cccccc;
+    padding: 0px;
+    margin-left: 16%;
 }
 .modal-input-rating{
     display: block;
-    position: fixed;
+    position: relative;
     width: 60px;
     height: 60px;
-    top:calc(65% - 30px);
+    top:calc(35% - 30px);
     left: calc(50% - 30px);
 
 }
@@ -100,7 +112,6 @@ body, html {
     width: 0;
     height: 100%;
     margin: 0% 50%;
-    -webkit-transform: rotate(-360deg);
     transition: all 0.8s ease-in-out;
 }
 .modal-input-rating li input {
@@ -117,6 +128,8 @@ body, html {
     margin-bottom: 120px;
     background: #fff;
     border-radius: 50%;
+    color: #000;
+    font-family: "Apple SD Gothic Neo";
     text-align: center;
     font-size: 1px;
     overflow: hidden;
@@ -140,13 +153,31 @@ body, html {
     vertical-align: middle;
     line-height: 60px;
 }
-.modal-input-rating:hover{
-    background: cyan;
+.modal-input-create{
+    display: block;
+    position: relative;
+    width: 54.4%;
+    height: 5%;
+    min-height: 40px;
+    max-height: 40px;
+    top:58%;
+    margin:auto auto auto auto;
+    color: #333333;
+    background: #605bff;
+    text-align: center;
+    border-radius: 4px;
+    line-height: 40px;
+    transition: all 0.8s ease-in-out, color 0.2s, background 0.2s;
 }
-.modal-input-rating:active{
-    background: coral;
+.modal-input-create:hover{
+    background: #aa5bff;
+    color: #bbbbbb;
 }
+.modal-input-create:active{
 
+    background: #ff5729;
+    color: #f5f2dc;
+}
 
 .room-area{
     float: left;
@@ -204,15 +235,48 @@ body, html {
 
 .my-message-block {
     position: relative;
-    background: #cfd520;
+    background: #333640;
     width: 98%;
     min-height: 60px;
     max-height: 30%;
     margin-left: 1%;
     margin-right: 1%;
-    margin-bottom: 4%;
-    border: 1px solid #c2e1f5;
+    margin-top: 1%;
+    border: 1px solid #444444;
     border-radius: 10px;
+}
+.my-message-block-info{
+    display: block;
+    position: relative;
+    width:calc(98% - 60px);
+    height: 24px;
+    margin-top: 2px;
+    margin-left: 60px;
+    margin-bottom: 0px;
+}
+.my-message-block-info-nick{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d2d2d2;
+    height: 100%;
+}
+.my-message-block-info-timestamp{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    margin-left: 2%;
+    font-size: 16px;
+    color: #a2a2a2;
+    height: 100%;
 }
 .my-message-block-message{
     display: block;
@@ -220,6 +284,7 @@ body, html {
     position: relative;
     margin-left: 60px;
     width: 98%;
+    color: #cccccc;
     word-break: break-all;
     white-space: pre-wrap;
 }
@@ -229,23 +294,85 @@ body, html {
     float: left;
     top:0px;
     background-size: cover;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
+    margin-left: 2px;
+    margin-top: 2px;
+    overflow:hidden;
+    border-width: 0px;
+    border-radius: 50%;
+}
+.another-message-block {
+    position: relative;
+    background: #333333;
+    width: 98%;
+    min-height: 60px;
+    max-height: 30%;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 1%;
+    border: 1px solid #444444;
+    border-radius: 10px;
+}
+.another-message-block-info{
+    display: block;
+    position: relative;
+    width:calc(98% - 60px);
+    height: 24px;
+    margin-top: 2px;
+    margin-left: 60px;
+    margin-bottom: 0px;
+}
+.another-message-block-info-nick{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d2d2d2;
+    height: 100%;
+}
+.another-message-block-info-timestamp{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    margin-left: 2%;
+    font-size: 16px;
+    color: #a2a2a2;
+    height: 100%;
+}
+.another-message-block-message{
+    display: block;
+    direction: ltr;
+    position: relative;
+    margin-left: 60px;
+    width: 98%;
+    color: #cccccc;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+.another-message-block-profile{
+    display: block;
+    position: absolute;
+    float: left;
+    top:0px;
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    margin-left: 2px;
+    margin-top: 2px;
     overflow:hidden;
     background: url("../../public/images/picture.jpg") no-repeat center;
     border-width: 0px;
     border-radius: 50%;
 }
-.another-message-block {
-    direction: ltr;
-    margin-left: 50%;
-    position: relative;
-    background: #cfd520;
-    width: 50%;
-    border: 1px solid #c2e1f5;
-    border-radius: 10px;
-}
-
 .input-wrapper{
     display: inline-block;
     position: relative;
@@ -276,13 +403,13 @@ body, html {
     max-width: 150px;
     height: 54px;
     max-height: 54px;
-    color: darkslategrey;
-    background: #30ff7d;
+    color: #f5f2dc;
+    background: #00585e;
     text-align: center;
     margin-left: 1px;
     padding-bottom: 2px;
     line-height: 54px;
-    border: 1px solid green;
+    border: 1px solid #454445;
     border-radius: 4px;
 }
 .message-send:hover{
