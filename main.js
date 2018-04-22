@@ -27,12 +27,11 @@ function createLoginWindow() {
   };
 
   // Create the browser window.
-  console.log(width);
   win = new BrowserWindow({
-    width: 600,
-    minWidth:600,
-    height: 600,
-    minHeight:600,
+    width: width/2>600? width/2 : 600,
+    minWidth:width/2>600? width/2 : 600,
+    height: height/2>600? height/2 : 600,
+    minHeight:height/2>600? height/2 : 600,
     resizable:false,
     fullscreenable:false,
     fullscreenWindowTitle:false,
