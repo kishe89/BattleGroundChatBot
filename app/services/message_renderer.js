@@ -34,6 +34,7 @@ MessageRenderer.prototype.createRoom = function () {
         if(index%2 !== 0){
           node.style.transform = 'none';
         }
+        node.removeEventListener('click',self.ratingClickEventHandler);
       });
     }
   });
@@ -46,6 +47,7 @@ MessageRenderer.prototype.createRoom = function () {
           node.style.transform = 'none';
 
         }
+        node.removeEventListener('click',self.ratingClickEventHandler);
       });
     }
   };
@@ -63,6 +65,7 @@ MessageRenderer.prototype.createRoom = function () {
 };
 
 MessageRenderer.prototype.toggleOptions = function(elementId) {
+  const self = this;
   const angleStart = 360;
   const element = this.document.getElementById(elementId);
   const ratingDiv = this.document.getElementById('modal-input-rating');
@@ -71,6 +74,7 @@ MessageRenderer.prototype.toggleOptions = function(elementId) {
   element.childNodes.forEach((item,index)=>{
     if(index%2){
       liList.push(item);
+      item.childNodes[3].addEventListener('click',self.ratingClickEventHandler);
     }
   });
   const classes = ratingDiv.className.split(" ");
@@ -80,6 +84,11 @@ MessageRenderer.prototype.toggleOptions = function(elementId) {
     classes.indexOf('open') ? this.rotate(liList[index],d) : this.rotate(liList[index],angleStart);
   }
 };
+MessageRenderer.prototype.ratingClickEventHandler = function (item) {
+  const string = item.srcElement.childNodes[0].data;
+  console.log(string.split('점')[0]);
+};
+
 MessageRenderer.prototype.toggleClass = function (elementId,className){
   const element = this.document.getElementById(elementId);
 
