@@ -1,43 +1,19 @@
+'use strict';
 (()=>{
-  const socket = io.connect('http://192.168.0.2:3000',{
-    transports: ['websocket']
-  });
-
-  //mode value
-  const MY_MESSAGE = 1;
-  const MY_WHISPER = 11;
-  const ANOTHER_MESSAGE = 2;
-  const ANOTHER_WHISPER = 22;
-  const BOT_MESSAGE = 3;
-  const BOT_WHISPER = 33;
-
-
-  socket.on('message-public', function (data) {
-    renderMessage(data.message,ANOTHER_MESSAGE);
-  });
-  function sendMessage(socket) {
-    const message = document.getElementById("messageInput").value;
-    renderMessage(message,MY_MESSAGE);
-    socket.emit('message-public',message);
-  };
-
-  function renderMessage(message,mode) {
-    const messageList = document.getElementById("message-area");
-    const message_row = document.createElement("div");
-    switch (mode){
-      case MY_MESSAGE:
-        message_row.className = "my-message-block";
-        message_row.innerText = message;
-        break;
-      case ANOTHER_MESSAGE:
-        message_row.className = "another-message-block";
-        message_row.innerText = message;
-        break;
-    }
-
-    messageList.appendChild(message_row);
-  };
-  document.getElementById("messageSend").addEventListener("click", function(){
-    sendMessage(socket);
+  const electron = require("electron");
+  const connectToDefault = require('./app/services/default_socket');
+  const connectToBot = require('./app/services/bot_socket');
+  const MessageRenderer = require('./app/services/message_renderer');
+  const Channel = require('./app/services/channel');
+  const channel = new Channel();
+  const renderer = new MessageRenderer(document,window);
+  const ipcRenderer = electron.ipcRenderer;
+  let token = undefined;
+  let defaultSocket;
+  let botSocket;
+  ipcRenderer.on('connect',(event,args)=>{
+    console.log('receive event from ipcMain');
+    defaultSocket = connectToDefault(args,token,channel.DEVELOPMENT_HOST(),renderer);
+    botSocket = connectToBot(args,token,channel.DEVELOPMENT_BOT_CHANNEL(),renderer);
   });
 })();

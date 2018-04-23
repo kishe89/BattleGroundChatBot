@@ -63,3 +63,8 @@ typings/
 
 /.idea
 /.idea/*
+/credentials
+/init
+/credentials/*
+/init/*
+server/
