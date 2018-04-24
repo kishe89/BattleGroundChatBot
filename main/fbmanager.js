@@ -4,6 +4,7 @@ function FBManager(app,axios,path,fs,FB) {
   if(!(this instanceof FBManager)){
     throw new TypeError('FBManager must be created with new keyword');
   }
+
   this.FB = FB;
   this.axios = axios;
   this.fs = fs;
@@ -75,7 +76,6 @@ FBManager.prototype.login = function (parentWindow,BrowserWindow) {
     authwin = null;
   });
 };
-
 
 /***
  * facebook permission deny request

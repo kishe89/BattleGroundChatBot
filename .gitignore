@@ -68,3 +68,4 @@ typings/
 /credentials/*
 /init/*
 server/
+app/services/channel.js
