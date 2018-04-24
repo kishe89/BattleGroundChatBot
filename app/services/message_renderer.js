@@ -9,6 +9,7 @@ function MessageRenderer(document,window) {
   this.messageType = require('../services/message_type');
   const MessageFactory = require('../services/MessageFactory');
   this.MessageFactory = new MessageFactory();
+  this.selectedRatingValue = 0;
 
 }
 
@@ -17,10 +18,51 @@ MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
     this.sendMessage(socket);
   });
 };
-MessageRenderer.prototype.addCreateRoomListener = function (id, event) {
+MessageRenderer.prototype.addCreateRoomListener = function (id, event,socket) {
+  const self = this;
   this.document.getElementById(id).addEventListener(event,()=>{
-    this.createRoom();
+    this.createRoom(socket);
   });
+  this.document.getElementById('modal-input-create').addEventListener(event,createRoomButtonHandler);
+  function createRoomButtonHandler () {
+    console.log('click createRoom Button');
+    const modal = self.document.getElementById('myModal');
+    const modal_input_rating = self.document.getElementById('rating-ul').childNodes;
+    const ratingDiv = self.document.getElementById('modal-input-rating');
+    const modalCreateRoomButton = self.document.getElementById('modal-input-create');
+    modal.style.display = 'block';
+    const roomNameInput = self.document.getElementById('modal-input-roomName');
+    const ratingInput = self.document.getElementsByClassName('selected');
+    const roomList = document.getElementById('room-area');
+    const createRoomButton = roomList.lastElementChild;
+    const room_item_text_p = document.createElement('p');
+    const room_item_div = document.createElement('div');
+    console.log(ratingInput.length);
+    if(roomNameInput.value === ''){
+      alert('방이름이 버어있습니다. 방이름은 필수입니다.');
+      return;
+    }
+    if(ratingInput.length === 0){
+      alert('레이팅선택은 필수입니다.');
+      return;
+    }
+    const rating = ratingInput[1].innerText.split('점')[0];
+    console.log("rating : "+rating);
+    const message = {
+      roomName : roomNameInput.value,
+      rating : rating,
+      token : socket.access_token
+    };
+
+    socket.emit('createRoom',message );
+    room_item_text_p.innerText=roomNameInput.value;
+    room_item_div.className = 'room-item';
+    room_item_div.id='room';
+    room_item_div.appendChild(room_item_text_p);
+    roomList.insertBefore(room_item_div,createRoomButton);
+    self.scrollToBottom('room-area');
+    self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
+  };
 };
 
 MessageRenderer.prototype.ratingDialogReset = function (modal, ratingDiv, modal_input_rating, self) {
@@ -29,21 +71,25 @@ MessageRenderer.prototype.ratingDialogReset = function (modal, ratingDiv, modal_
   modal_input_rating.forEach((node, index) => {
     if (index % 2 !== 0) {
       node.style.transform = 'none';
+      node.childNodes[3].removeEventListener('click', self.ratingClickEventHandler);
+      node.childNodes[1].classList.remove('selected');
+      node.childNodes[3].classList.remove('selected');
     }
-    node.removeEventListener('click', self.ratingClickEventHandler);
   });
 };
 
-MessageRenderer.prototype.createRoom = function () {
+MessageRenderer.prototype.createRoom = function (socket) {
   const self = this;
   const modal = this.document.getElementById('myModal');
   const modal_input_rating = this.document.getElementById('rating-ul').childNodes;
   const ratingDiv = this.document.getElementById('modal-input-rating');
+  const modalCreateRoomButton = this.document.getElementById('modal-input-create');
   modal.style.display = 'block';
   this.document.addEventListener('keydown',(event)=>{
     const keyName = event.key;
     if(keyName === 'Escape' && modal !== null){
       self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
+
     }
   });
   this.window.onclick = (event)=>{
@@ -51,19 +97,34 @@ MessageRenderer.prototype.createRoom = function () {
       self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
     }
   };
+
   setTimeout(function() { self.toggleOptions('rating-ul'); }, 100);
-  const roomList = document.getElementById('room-area');
-  const createRoomButton = roomList.lastElementChild;
-  const room_item_text_p = document.createElement('p');
-  const room_item_div = document.createElement('div');
-  room_item_text_p.innerText='room';
-  room_item_div.className = 'room-item';
-  room_item_div.id='room';
-  room_item_div.appendChild(room_item_text_p);
-  roomList.insertBefore(room_item_div,createRoomButton);
-  this.scrollToBottom('room-area');
+
 };
 
+MessageRenderer.prototype.ratingClickEventHandler = function(item) {
+  const string = item.srcElement.childNodes[0].data;
+  self.selectedRatingValue = string.split('점')[0];
+  console.log(string.split('점')[0]);
+  toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
+  toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
+  function toggleClass(element, className) {
+
+    if (element.classList) {
+      console.log('element toggled : '+element.classList.toggle(className));
+    } else {
+      // For IE9
+      const classes = element.className.split(" ");
+      const i = classes.indexOf(className);
+
+      if (i >= 0)
+        classes.splice(i, 1);
+      else
+        classes.push(className);
+      element.className = classes.join(" ");
+    }
+  }
+};
 MessageRenderer.prototype.toggleOptions = function(elementId) {
   const self = this;
   const angleStart = 360;
@@ -83,33 +144,7 @@ MessageRenderer.prototype.toggleOptions = function(elementId) {
     const d = index*deg;
     classes.indexOf('open') ? this.rotate(liList[index],d) : this.rotate(liList[index],angleStart);
   }
-};
-MessageRenderer.prototype.ratingClickEventHandler = function (item) {
-  const string = item.srcElement.childNodes[0].data;
-  const ratingLiSelectedColor = '#555555';
-  const ratingLiNotSelectedColor = '#fff';
-  console.log(string.split('점')[0]);
-  console.log(item.srcElement.childNodes[0].parentNode.control.id);
-  // item.srcElement.childNodes[0].parentNode.selected = !item.srcElement.childNodes[0].parentNode.selected;
 
-  toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
-  toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
-  function toggleClass(element, className) {
-
-    if (element.classList) {
-      console.log('toggled : '+element.classList.toggle(className));
-    } else {
-      // For IE9
-      const classes = element.className.split(" ");
-      const i = classes.indexOf(className);
-
-      if (i >= 0)
-        classes.splice(i, 1);
-      else
-        classes.push(className);
-      element.className = classes.join(" ");
-    }
-  }
 };
 
 MessageRenderer.prototype.toggleClass = function (elementId,className){
