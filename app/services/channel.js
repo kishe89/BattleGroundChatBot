@@ -11,7 +11,7 @@ Channel.prototype.HOST = function () {
   return '';
 }
 Channel.prototype.DEVELOPMENT_HOST = ()=> {
-  return 'http://192.168.0.21:3001';
+  return 'http://192.168.219.110:3001';
 };
 Channel.prototype.BOT_NAMESPACE = ()=> {
   return '/bot';
