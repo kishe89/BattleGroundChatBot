@@ -77,7 +77,6 @@ FBManager.prototype.login = function (parentWindow,BrowserWindow) {
   });
 };
 
-
 /***
  * facebook permission deny request
  * /DELETE /{user-id}/permissions
