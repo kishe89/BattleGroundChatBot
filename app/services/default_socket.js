@@ -33,7 +33,7 @@ function connectToDefault(args,token,url,renderer) {
     if(!agoConnected){
       agoConnected = true;
       renderer.addMessageSendListener('messageSend','click',socket);
-      renderer.addCreateRoomListener('createRoom','click');
+      renderer.addCreateRoomListener('createRoom','click',socket);
     }
   });
   return socket;

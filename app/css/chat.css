@@ -162,6 +162,7 @@ body, html {
 .modal-input-create{
     display: block;
     position: relative;
+    /*pointer-events: none*/
     width: 54.4%;
     height: 5%;
     min-height: 40px;
