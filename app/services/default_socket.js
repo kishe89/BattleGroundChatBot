@@ -20,7 +20,8 @@ function connectToDefault(args,token,url,renderer) {
     console.log(message);
   });
   socket.on('message-public', function (data) {
-    renderer.renderMessage(data.message,renderer.messageType.ANOTHER_MESSAGE,socket.user.nickName,socket.args.picture);
+    console.log(data);
+    renderer.renderMessage(data.message,renderer.messageType.ANOTHER_MESSAGE,data.user.nickName,socket.args.picture);
   });
   socket.on('createdToken',(access_token)=>{
     console.log(access_token);
