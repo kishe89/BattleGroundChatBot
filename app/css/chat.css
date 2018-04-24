@@ -184,6 +184,11 @@ body, html {
     background: #ff5729;
     color: #f5f2dc;
 }
+.modal-input-create:active{
+
+    background: #ff5729;
+    color: #f5f2dc;
+}
 
 .room-area{
     float: left;
