@@ -7,7 +7,10 @@ function MessageRenderer(document,window) {
   this.document = document;
   this.window = window;
   this.messageType = require('../services/message_type');
-};
+  const MessageFactory = require('../services/MessageFactory');
+  this.MessageFactory = new MessageFactory();
+
+}
 
 MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
   this.document.getElementById(id).addEventListener(event, ()=>{
@@ -19,6 +22,18 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event) {
     this.createRoom();
   });
 };
+
+MessageRenderer.prototype.ratingDialogReset = function (modal, ratingDiv, modal_input_rating, self) {
+  modal.style.display = 'none';
+  ratingDiv.classList.remove('open');
+  modal_input_rating.forEach((node, index) => {
+    if (index % 2 !== 0) {
+      node.style.transform = 'none';
+    }
+    node.removeEventListener('click', self.ratingClickEventHandler);
+  });
+};
+
 MessageRenderer.prototype.createRoom = function () {
   const self = this;
   const modal = this.document.getElementById('myModal');
@@ -28,27 +43,12 @@ MessageRenderer.prototype.createRoom = function () {
   this.document.addEventListener('keydown',(event)=>{
     const keyName = event.key;
     if(keyName === 'Escape' && modal !== null){
-      modal.style.display = 'none';
-      ratingDiv.classList.remove('open');
-      modal_input_rating.forEach((node,index)=>{
-        if(index%2 !== 0){
-          node.style.transform = 'none';
-        }
-        node.removeEventListener('click',self.ratingClickEventHandler);
-      });
+      self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
     }
   });
   this.window.onclick = (event)=>{
     if (event.target === modal) {
-      modal.style.display = "none";
-      ratingDiv.classList.remove('open');
-      modal_input_rating.forEach((node,index)=>{
-        if(index%2 !== 0){
-          node.style.transform = 'none';
-
-        }
-        node.removeEventListener('click',self.ratingClickEventHandler);
-      });
+      self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
     }
   };
   setTimeout(function() { self.toggleOptions('rating-ul'); }, 100);
@@ -86,7 +86,30 @@ MessageRenderer.prototype.toggleOptions = function(elementId) {
 };
 MessageRenderer.prototype.ratingClickEventHandler = function (item) {
   const string = item.srcElement.childNodes[0].data;
+  const ratingLiSelectedColor = '#555555';
+  const ratingLiNotSelectedColor = '#fff';
   console.log(string.split('점')[0]);
+  console.log(item.srcElement.childNodes[0].parentNode.control.id);
+  // item.srcElement.childNodes[0].parentNode.selected = !item.srcElement.childNodes[0].parentNode.selected;
+
+  toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
+  toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
+  function toggleClass(element, className) {
+
+    if (element.classList) {
+      console.log('toggled : '+element.classList.toggle(className));
+    } else {
+      // For IE9
+      const classes = element.className.split(" ");
+      const i = classes.indexOf(className);
+
+      if (i >= 0)
+        classes.splice(i, 1);
+      else
+        classes.push(className);
+      element.className = classes.join(" ");
+    }
+  }
 };
 
 MessageRenderer.prototype.toggleClass = function (elementId,className){
@@ -126,60 +149,31 @@ MessageRenderer.prototype.sendMessage = function(socket){
   socket.emit('message-public',{token:socket.access_token,message:message});
 };
 MessageRenderer.prototype.renderMessage = function (message, type, name, image) {
-  const messageList = this.document.getElementById('message-area');
-  const message_info_row = this.document.createElement('div');
-  const message_info_nick = this.document.createElement('div');
-  const message_info_timestamp = this.document.createElement('div');
-  const message_row = this.document.createElement('div');
-  const message_content = this.document.createElement('div');
-  const profile_img = this.document.createElement('img');
-  switch (type){
-    case this.messageType.MY_MESSAGE:
-      message_row.className = 'my-message-block';
-      message_info_row.className = 'my-message-block-info';
-      message_info_nick.innerText = name;
-      message_info_nick.className = 'my-message-block-info-nick';
-      message_info_timestamp.innerText = new Date(Date.now()).toLocaleString();
-      message_info_timestamp.className = 'my-message-block-info-timestamp';
-      message_content.innerText = message;
-      message_content.className = 'my-message-block-message';
-      profile_img.className = 'my-message-block-profile';
-      profile_img.style.background = "url('"+image+"')no-repeat right top";
-      break;
-    case this.messageType.ANOTHER_MESSAGE:
-      message_row.className = 'another-message-block';
-      message_info_row.className = 'another-message-block-info';
-      message_info_nick.innerText = name;
-      message_info_nick.className = 'another-message-block-info-nick';
-      message_info_timestamp.innerText = new Date(Date.now()).toLocaleString();
-      message_info_timestamp.className = 'another-message-block-info-timestamp';
-      message_content.innerText = message;
-      message_content.className = 'another-message-block-message';
-      profile_img.className = 'another-message-block-profile';
-      break;
-    case this.messageType.BOT_MESSAGE:
-      message_row.className = 'another-message-block';
-      message_info_row.className = 'another-message-block-info';
-      message_info_nick.innerText = name;
-      message_info_nick.className = 'another-message-block-info-nick';
-      message_info_timestamp.innerText = new Date(Date.now()).toLocaleString();
-      message_info_timestamp.className = 'another-message-block-info-timestamp';
-      message_content.innerText = message;
-      message_content.className = 'another-message-block-message';
-      profile_img.className = 'another-message-block-profile';
-  }
-  message_info_row.appendChild(message_info_nick);
-  message_info_row.appendChild(message_info_timestamp);
-  message_row.appendChild(message_info_row);
-  message_row.appendChild(message_content);
-  message_row.appendChild(profile_img);
-  messageList.appendChild(message_row);
-  this.scrollToBottom('message-area');
+  const self = this;
+  new Promise((resolve)=>{
+    let messageRow = self.MessageFactory.createMessageRow(self.document);
+    switch (type){
+      case this.messageType.MY_MESSAGE:
+        messageRow = self.MessageFactory.prepareMyMessageRow(messageRow,name,message,image);
+        break;
+      case this.messageType.ANOTHER_MESSAGE:
+        messageRow = self.MessageFactory.prepareAnotherMessageRow(messageRow,name,message,image);
+        break;
+      case this.messageType.BOT_MESSAGE:
+        messageRow = self.MessageFactory.prepareBotMessageRow(messageRow,name,message,image);
+        break;
+    }
+    self.MessageFactory.render(messageRow);
+    self.scrollToBottom('message-area');
+    resolve(message);
+  });
 };
 MessageRenderer.prototype.scrollToBottom = function (elementId) {
   const messageArea = this.document.getElementById(elementId);
   messageArea.scrollTop = messageArea.scrollHeight;
-}
+};
+
+
 MessageRenderer.prototype.scrollToTop = function (elementId) {
   const messageArea = this.document.getElementById(elementId);
   messageArea.scrollTop = messageArea.scrollHeight-messageArea.scrollHeight;
