@@ -69,3 +69,5 @@ typings/
 /init/*
 server/
 app/services/channel.js
+.DS_Store
+app/.DS_Store
