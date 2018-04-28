@@ -71,3 +71,4 @@ server/
 app/services/channel.js
 .DS_Store
 app/.DS_Store
+package-lock.json
