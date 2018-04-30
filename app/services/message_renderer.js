@@ -11,7 +11,6 @@ function MessageRenderer(document,window) {
   const CreateRoomModal = require('../services/CreateRoomModal');
   this.roomModal = new CreateRoomModal(document);
   this.MessageFactory = new MessageFactory();
-  this.selectedRatingValue = 0;
 
 }
 
