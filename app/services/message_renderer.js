@@ -183,6 +183,7 @@ MessageRenderer.prototype.sendMessage = function(socket){
   this.renderMessage(message,this.messageType.MY_MESSAGE,socket.user.nickName,socket.args.picture);
   socket.emit('message-public',{token:socket.access_token,message:message});
 };
+
 MessageRenderer.prototype.renderMessage = function (message, type, name, image) {
   const self = this;
   new Promise((resolve)=>{
