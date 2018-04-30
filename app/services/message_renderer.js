@@ -9,7 +9,6 @@ function MessageRenderer(document,window) {
   this.messageType = require('../services/message_type');
   const MessageFactory = require('../services/MessageFactory');
   this.MessageFactory = new MessageFactory();
-  this.selectedRatingValue = 0;
 
 }
 
@@ -20,163 +19,46 @@ MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
 };
 MessageRenderer.prototype.addCreateRoomListener = function (id, event,socket) {
   const self = this;
+  let CreateRoomModal = require('../services/CreateRoomModal');
   this.document.getElementById(id).addEventListener(event,()=>{
-    this.createRoom(socket);
+    const modal = new CreateRoomModal(self.document);
+    modal.showModal();
+    this.document.addEventListener('keydown',(event)=>{
+      const keyName = event.key;
+      if(keyName === 'Escape' && modal !== null){
+        modal.dismissModal();
+      }
+    });
+    this.window.onclick = (event)=>{
+      if (event.target === modal.modal) {
+        modal.dismissModal();
+      }
+    };
   });
   this.document.getElementById('modal-input-create').addEventListener(event,createRoomButtonHandler);
   function createRoomButtonHandler () {
-    console.log('click createRoom Button');
-    const modal = self.document.getElementById('myModal');
-    const modal_input_rating = self.document.getElementById('rating-ul').childNodes;
-    const ratingDiv = self.document.getElementById('modal-input-rating');
-    const modalCreateRoomButton = self.document.getElementById('modal-input-create');
-    modal.style.display = 'block';
-    const roomNameInput = self.document.getElementById('modal-input-roomName');
-    const ratingInput = self.document.getElementsByClassName('selected');
-    const roomList = document.getElementById('room-area');
-    const createRoomButton = roomList.lastElementChild;
-    const room_item_text_p = document.createElement('p');
-    const room_item_div = document.createElement('div');
-    console.log(ratingInput.length);
-    if(roomNameInput.value === ''){
+    const modal = new CreateRoomModal(self.document);
+    if(!modal.RoomNameIsValid()){
       alert('방이름이 버어있습니다. 방이름은 필수입니다.');
       return;
     }
-    if(ratingInput.length === 0){
+    if(!modal.RatingIsSelected()){
       alert('레이팅선택은 필수입니다.');
       return;
     }
-    const rating = ratingInput[1].innerText.split('점')[0];
-    console.log("rating : "+rating);
     const message = {
-      roomName : roomNameInput.value,
-      rating : rating,
+      roomName : modal.getRoomName(),
+      rating : modal.getRating(),
       token : socket.access_token
     };
 
     socket.emit('createRoom',message );
-    room_item_text_p.innerText=roomNameInput.value;
-    room_item_div.className = 'room-item';
-    room_item_div.id='room';
-    room_item_div.appendChild(room_item_text_p);
-    roomList.insertBefore(room_item_div,createRoomButton);
+    modal.createRoom();
     self.scrollToBottom('room-area');
-    self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
+    modal.dismissModal();
   };
 };
 
-MessageRenderer.prototype.ratingDialogReset = function (modal, ratingDiv, modal_input_rating, self) {
-  modal.style.display = 'none';
-  ratingDiv.classList.remove('open');
-  modal_input_rating.forEach((node, index) => {
-    if (index % 2 !== 0) {
-      node.style.transform = 'none';
-      node.childNodes[3].removeEventListener('click', self.ratingClickEventHandler);
-      node.childNodes[1].classList.remove('selected');
-      node.childNodes[3].classList.remove('selected');
-    }
-  });
-};
-
-MessageRenderer.prototype.createRoom = function (socket) {
-  const self = this;
-  const modal = this.document.getElementById('myModal');
-  const modal_input_rating = this.document.getElementById('rating-ul').childNodes;
-  const ratingDiv = this.document.getElementById('modal-input-rating');
-  const modalCreateRoomButton = this.document.getElementById('modal-input-create');
-  modal.style.display = 'block';
-  this.document.addEventListener('keydown',(event)=>{
-    const keyName = event.key;
-    if(keyName === 'Escape' && modal !== null){
-      self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
-
-    }
-  });
-  this.window.onclick = (event)=>{
-    if (event.target === modal) {
-      self.ratingDialogReset(modal, ratingDiv, modal_input_rating, self);
-    }
-  };
-
-  setTimeout(function() { self.toggleOptions('rating-ul'); }, 100);
-
-};
-
-MessageRenderer.prototype.ratingClickEventHandler = function(item) {
-  const string = item.srcElement.childNodes[0].data;
-  self.selectedRatingValue = string.split('점')[0];
-  console.log(string.split('점')[0]);
-  toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
-  toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
-  function toggleClass(element, className) {
-
-    if (element.classList) {
-      console.log('element toggled : '+element.classList.toggle(className));
-    } else {
-      // For IE9
-      const classes = element.className.split(" ");
-      const i = classes.indexOf(className);
-
-      if (i >= 0)
-        classes.splice(i, 1);
-      else
-        classes.push(className);
-      element.className = classes.join(" ");
-    }
-  }
-};
-MessageRenderer.prototype.toggleOptions = function(elementId) {
-  const self = this;
-  const angleStart = 360;
-  const element = this.document.getElementById(elementId);
-  const ratingDiv = this.document.getElementById('modal-input-rating');
-  this.toggleClass('modal-input-rating','open');
-  const liList = [];
-  element.childNodes.forEach((item,index)=>{
-    if(index%2){
-      liList.push(item);
-      item.childNodes[3].addEventListener('click',self.ratingClickEventHandler);
-    }
-  });
-  const classes = ratingDiv.className.split(" ");
-  const deg = -360/liList.length;
-  for(let index = 0; index<liList.length; index++){
-    const d = index*deg;
-    classes.indexOf('open') ? this.rotate(liList[index],d) : this.rotate(liList[index],angleStart);
-  }
-
-};
-
-MessageRenderer.prototype.toggleClass = function (elementId,className){
-  const element = this.document.getElementById(elementId);
-
-  if (element.classList) {
-    console.log('toggled : '+element.classList.toggle(className));
-  } else {
-    // For IE9
-    const classes = element.className.split(" ");
-    const i = classes.indexOf(className);
-
-    if (i >= 0)
-      classes.splice(i, 1);
-    else
-      classes.push(className);
-    element.className = classes.join(" ");
-  }
-};
-MessageRenderer.prototype.rotate = function (li,d) {
-  li.style.webkitTransform = 'rotate('+d+'deg)';
-  li.style.mozTransform    = 'rotate('+d+'deg)';
-  li.style.msTransform     = 'rotate('+d+'deg)';
-  li.style.oTransform      = 'rotate('+d+'deg)';
-  li.style.transform       = 'rotate('+d+'deg)';
-  d = -1*d;
-  li.style.webkitTransform = 'rotate('+d+'deg)';
-  li.style.mozTransform    = 'rotate('+d+'deg)';
-  li.style.msTransform     = 'rotate('+d+'deg)';
-  li.style.oTransform      = 'rotate('+d+'deg)';
-  li.style.transform       = 'rotate('+d+'deg)';
-};
 
 MessageRenderer.prototype.sendMessage = function(socket){
   const message = this.document.getElementById('messageInput').value;
