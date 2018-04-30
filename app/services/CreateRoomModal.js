@@ -57,7 +57,7 @@ function CreateRoomModal(document) {
       roomList.insertBefore(room_item_div,createRoomButton);
     },
     initRoomName:()=>{
-      room_item_text_p.innerText= '';
+      document.getElementById('modal-input-roomName').value= '';
     },
     showModal:showModal,
     dismissModal:dismissModal
@@ -70,7 +70,7 @@ CreateRoomModal.prototype.showModal = function () {
 };
 CreateRoomModal.prototype.dismissModal = function () {
   const self = this;
-
+  this.initRoomName();
   this.modal.style.display = 'none';
   this.ratingDiv.classList.remove('open');
   this.modal_input_rating.forEach((node, index) => {

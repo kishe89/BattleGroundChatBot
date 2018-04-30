@@ -8,8 +8,6 @@ function MessageRenderer(document,window) {
   this.window = window;
   this.messageType = require('../services/message_type');
   const MessageFactory = require('../services/MessageFactory');
-  const CreateRoomModal = require('../services/CreateRoomModal');
-  this.roomModal = new CreateRoomModal(document);
   this.MessageFactory = new MessageFactory();
 
 }
@@ -21,8 +19,9 @@ MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
 };
 MessageRenderer.prototype.addCreateRoomListener = function (id, event,socket) {
   const self = this;
+  let CreateRoomModal = require('../services/CreateRoomModal');
   this.document.getElementById(id).addEventListener(event,()=>{
-    const modal = this.roomModal;
+    const modal = new CreateRoomModal(self.document);
     modal.showModal();
     this.document.addEventListener('keydown',(event)=>{
       const keyName = event.key;
@@ -38,7 +37,7 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event,socket) {
   });
   this.document.getElementById('modal-input-create').addEventListener(event,createRoomButtonHandler);
   function createRoomButtonHandler () {
-    const modal = self.roomModal;
+    const modal = new CreateRoomModal(self.document);
     if(!modal.RoomNameIsValid()){
       alert('방이름이 버어있습니다. 방이름은 필수입니다.');
       return;
