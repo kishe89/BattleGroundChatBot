@@ -24,7 +24,6 @@ function CreateRoomModal(document) {
   };
   const showModal = this.showModal;
   const dismissModal = this.dismissModal;
-  const toggleClass = this.toggleClass;
   const toggleOptions = this.toggleOptions;
   const rotate = this.rotate;
   const ratingClickEventHandler = this.ratingClickEventHandler;
@@ -35,7 +34,6 @@ function CreateRoomModal(document) {
     rating_ul:rating_ul,
     modal_input_rating:modal_input_rating,
     ratingDiv:ratingDiv,
-    toggleClass:toggleClass,
     toggleOptions:toggleOptions,
     rotate:rotate,
     ratingClickEventHandler:ratingClickEventHandler,
@@ -58,6 +56,9 @@ function CreateRoomModal(document) {
       room_item_div.appendChild(room_item_text_p);
       roomList.insertBefore(room_item_div,createRoomButton);
     },
+    initRoomName:()=>{
+      document.getElementById('modal-input-roomName').value= '';
+    },
     showModal:showModal,
     dismissModal:dismissModal
   };
@@ -69,6 +70,7 @@ CreateRoomModal.prototype.showModal = function () {
 };
 CreateRoomModal.prototype.dismissModal = function () {
   const self = this;
+  this.initRoomName();
   this.modal.style.display = 'none';
   this.ratingDiv.classList.remove('open');
   this.modal_input_rating.forEach((node, index) => {
@@ -81,50 +83,21 @@ CreateRoomModal.prototype.dismissModal = function () {
   });
 };
 CreateRoomModal.prototype.ratingClickEventHandler = function(item) {
+  const ClassManager = require('../services/cssHandler/ClassManager');
+  const classManager = new ClassManager();
   const string = item.srcElement.childNodes[0].data;
   console.log(string.split('점')[0]);
-  toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
-  toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
-  function toggleClass(element, className) {
-
-    if (element.classList) {
-      console.log('element toggled : '+element.classList.toggle(className));
-    } else {
-      // For IE9
-      const classes = element.className.split(" ");
-      const i = classes.indexOf(className);
-
-      if (i >= 0)
-        classes.splice(i, 1);
-      else
-        classes.push(className);
-      element.className = classes.join(" ");
-    }
-  };
-
-};
-CreateRoomModal.prototype.toggleClass = function(element, className) {
-
-  if (element.classList) {
-    console.log('element toggled : '+element.classList.toggle(className));
-  } else {
-    // For IE9
-    const classes = element.className.split(" ");
-    const i = classes.indexOf(className);
-
-    if (i >= 0)
-      classes.splice(i, 1);
-    else
-      classes.push(className);
-    element.className = classes.join(" ");
-  }
+  classManager.toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
+  classManager.toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
 };
 CreateRoomModal.prototype.toggleOptions = function() {
   const self = this;
   const angleStart = 360;
   const element = this.rating_ul;
   const ratingDiv = this.ratingDiv;
-  this.toggleClass(ratingDiv,'open');
+  const ClassManager = require('../services/cssHandler/ClassManager');
+  const classManager = new ClassManager();
+  classManager.toggleClass(ratingDiv,'open');
   const liList = [];
   element.childNodes.forEach((item,index)=>{
     if(index%2){
