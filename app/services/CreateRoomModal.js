@@ -13,7 +13,6 @@ function CreateRoomModal(document) {
   const room_item_text_p = document.createElement('p');
   const room_item_div = document.createElement('div');
 
-
   const getter = {
     getRoomName:()=>{
       return document.getElementById('modal-input-roomName').value;
@@ -28,7 +27,6 @@ function CreateRoomModal(document) {
   const rotate = this.rotate;
   const ratingClickEventHandler = this.ratingClickEventHandler;
 
-
   return {
     modal:modal,
     rating_ul:rating_ul,
@@ -40,14 +38,12 @@ function CreateRoomModal(document) {
     RatingIsSelected:()=>{
       const ratingInput = document.getElementsByClassName('selected');
       return ratingInput.length !== 0;
-
     },
     getRoomName:getter.getRoomName,
     getRating:getter.getRating,
     RoomNameIsValid:()=>{
       const roomNameInput = document.getElementById('modal-input-roomName');
       return !(roomNameInput.value === '' || roomNameInput.value === undefined);
-
     },
     createRoom:()=>{
       room_item_text_p.innerText= getter.getRoomName();
@@ -63,6 +59,7 @@ function CreateRoomModal(document) {
     dismissModal:dismissModal
   };
 }
+
 CreateRoomModal.prototype.showModal = function () {
   const self = this;
   this.modal.style.display = 'block';
