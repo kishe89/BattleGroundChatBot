@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app, net,BrowserWindow,ipcMain} = electron;
+const {app, net, BrowserWindow, ipcMain} = electron;
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
