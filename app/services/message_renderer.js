@@ -15,11 +15,13 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const createRoomButton = roomList.lastElementChild;
   const joinRoomList = socket.user.JoinRoomList;
+
   for(let i=0; i < joinRoomList.length; i++){
     const room_item = createRoomItem(joinRoomList[i]);
     room_item.room_item_div.addEventListener('click', loadRoomInfo);
     roomList.insertBefore(room_item.room_item_div,createRoomButton);
   }
+
   function createRoomItem(room) {
     const room_item_text_p = document.createElement('p');
     const room_item_div = document.createElement('div');
@@ -33,10 +35,18 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
       room_item_div:room_item_div
     };
   }
+
   function loadRoomInfo(event) {
-    console.log(event);
     const selectedRoom = event.srcElement;
+    console.log(selectedRoom.id);
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
+  }
+};
+
+MessageRenderer.prototype.loadMessage = function(messages){
+  for (let i = 0; i < messages.length; i++) {
+    let msg = messages.messages[i];
+    this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE, socket.user.nickName, socket.args.picture);
   }
 };
 
@@ -46,9 +56,9 @@ MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
   });
 };
 
-MessageRenderer.prototype.addPrivacyMessageSendListener = function(id,event,socket, result){
+MessageRenderer.prototype.addPrivacyMessageSendListener = function(id, event, socket){
   this.document.getElementById(id).addEventListener(event, ()=>{
-    this.sendPrivacyMessage(socket, result);
+    this.sendPrivacyMessage(socket);
   });
 };
 
@@ -96,7 +106,7 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
 };
 
 // 방 생성 성공 후 버튼에 클릭 이벤트 추가
-MessageRenderer.prototype.setRoomInfoListener = function(result) {
+MessageRenderer.prototype.addClickEventListener = function(result) {
   // 생성 된 방 button List element
   let rooms = document.getElementsByClassName('room-item');
   // 마지막으로 생성 된 방
@@ -105,8 +115,6 @@ MessageRenderer.prototype.setRoomInfoListener = function(result) {
   // 방 button click시에 click 된 방의 id 및 접속 유저 정보(access_token) 전송
   lastRoom.addEventListener('click', function() {
     console.log(selectedRoom.room_id);
-    // console.log(selectedRoom.socket.access_token);
-    // socket.emit('clickRoomItem', selectedRoom);
   });
 };
 
@@ -116,32 +124,66 @@ MessageRenderer.prototype.sendMessage = function(socket){
   socket.emit('message-public',{token:socket.access_token,message:message});
 };
 
-MessageRenderer.prototype.sendPrivacyMessage = function(socket, result){
+MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   const textBox = this.document.getElementById('messageInput');
-  let msg = textBox.value;
-  socket.emit('message-privacy',{room_id:result.room_id,token:socket.access_token,textMessage:msg,urlMessage:"test"});
-  textBox.value = '';
+
+  // textbox 공백 체크 후에 메세지 전송 및 render 처리
+  if(textBox.value !== '') {
+    let msg = textBox.value;
+    const targetRoom = socket.user.JoinRoomList[0];
+    const createdMessage = {
+      CreatedAt:new Date(Date.now()).toLocaleString(),
+      author:{
+        nickName:socket.user.nickName
+      },
+      textMessage:msg
+    };
+    const messageRow = this.renderMessage(createdMessage, this.messageType.MY_MESSAGE, socket.args.picture);
+    // send message to server
+    socket.emit('message-privacy', {
+      room_id: targetRoom._id,
+      token: socket.access_token,
+      textMessage: msg,
+      urlMessage: "test"
+    },(message)=>{
+      messageRow.message_info_sendStatus.innerText = 'OK';
+      messageRow.message_info_sendStatus.className = 'my-message-block-info-sendStatus success';
+      messageRow.message_info_timestamp.innerText = message.createdMessage.CreatedAt.toLocaleString();
+    });
+
+    textBox.value = '';
+  }
 };
 
-MessageRenderer.prototype.renderMessage = function (message, type, name, image) {
+MessageRenderer.prototype.addChangeMessageSendFailListener = function () {
+  let sendStatus = this.document.getElementsByClassName('my-message-block-info-sendStatus sending');
+  sendStatus[0].innerText = '!';
+  sendStatus[0].className = 'my-message-block-info-sendStatus fail';
+};
+
+MessageRenderer.prototype.renderMessage = function (message, type, image) {
   const self = this;
-  new Promise((resolve)=>{
+
     let messageRow = self.MessageFactory.createMessageRow(self.document);
+    let myMessageRow = self.MessageFactory.createMyMessageRow(self.document);
+
     switch (type){
       case this.messageType.MY_MESSAGE:
-        messageRow = self.MessageFactory.prepareMyMessageRow(messageRow,name,message,image);
+        myMessageRow = self.MessageFactory.prepareMyMessageRow(myMessageRow,message,image);
+        self.MessageFactory.myRender(myMessageRow);
         break;
       case this.messageType.ANOTHER_MESSAGE:
-        messageRow = self.MessageFactory.prepareAnotherMessageRow(messageRow,name,message,image);
+        myMessageRow = self.MessageFactory.prepareAnotherMessageRow(messageRow,message,image);
+        self.MessageFactory.render(messageRow);
         break;
       case this.messageType.BOT_MESSAGE:
-        messageRow = self.MessageFactory.prepareBotMessageRow(messageRow,name,message,image);
+        myMessageRow = self.MessageFactory.prepareBotMessageRow(messageRow,message,image);
+        self.MessageFactory.render(messageRow);
         break;
     }
-    self.MessageFactory.render(messageRow);
+
     self.scrollToBottom('message-area');
-    resolve(message);
-  });
+    return myMessageRow;
 };
 
 // 신규 메세지 수신 후 자동으로 스크롤을 화면 제일 하단으로 내림.

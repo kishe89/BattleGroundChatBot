@@ -301,6 +301,46 @@ body, html {
     color: #a2a2a2;
     height: 100%;
 }
+
+.my-message-block-info-sendStatus{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    margin-left: 2%;
+    font-size: 16px;
+    color: #a2a2a2;
+    height: 100%;
+}
+
+.my-message-block-info-sendStatus.success{
+     display: block;
+     position: relative;
+     float: left;
+     max-width:50%;
+     word-break: break-all;
+     white-space: pre-wrap;
+     margin-left: 2%;
+     font-size: 16px;
+     color: skyblue;
+     height: 100%;
+ }
+
+.my-message-block-info-sendStatus.fail{
+    display: block;
+    position: relative;
+    float: left;
+    max-width:50%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    margin-left: 2%;
+    font-size: 16px;
+    color: red;
+    height: 100%;
+}
+
 .my-message-block-message{
     display: block;
     direction: ltr;
