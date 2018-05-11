@@ -4,39 +4,38 @@ function MessageRenderer(document,window) {
   if(!(this instanceof MessageRenderer)){
     throw new TypeError('MessageRenderer must be created with new keyword');
   }
+  const MessageFactory = require('../services/MessageFactory');
+  const RoomItemFactory = require('../services/RoomItemFactory');
   this.document = document;
   this.window = window;
   this.messageType = require('../services/message_type');
-  const MessageFactory = require('../services/MessageFactory');
   this.MessageFactory = new MessageFactory();
-};
+  this.RoomItemFactory = new RoomItemFactory();
+  this.agoLoadMessageTargetRoom = '';
+  this.agoLoadMessageIsExcuted = true;
+}
 
 MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
-  const createRoomButton = roomList.lastElementChild;
   const joinRoomList = socket.user.JoinRoomList;
+  const self = this;
+  /**
+   * @description This condition explains that there is no need to reload.
+   */
+  if(roomList.childElementCount === joinRoomList.length+2)return;
+
 
   for(let i=0; i < joinRoomList.length; i++){
-    const room_item = createRoomItem(joinRoomList[i]);
-    room_item.room_item_div.addEventListener('click', loadRoomInfo);
-    roomList.insertBefore(room_item.room_item_div,createRoomButton);
-  }
-
-  function createRoomItem(room) {
-    const room_item_text_p = document.createElement('p');
-    const room_item_div = document.createElement('div');
-    room_item_text_p.innerText = room.roomName;
-    room_item_text_p.id = room._id;
-    room_item_div.className = 'room-item';
-    room_item_div.id='room';
-    room_item_div.appendChild(room_item_text_p);
-    return {
-      room_item_text_p:room_item_text_p,
-      room_item_div:room_item_div
-    };
+    const roomItem= this.renderRoomItem(roomList,joinRoomList[i]);
+    roomItem.room_item_div.addEventListener('click', loadRoomInfo);
   }
 
   function loadRoomInfo(event) {
+    if(self.agoLoadMessageIsExcuted){
+      self.agoLoadMessageIsExcuted = false;
+    }else{
+      return;
+    }
     const selectedRoom = event.srcElement;
     console.log(selectedRoom.id);
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
@@ -44,17 +43,19 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
 };
 
 MessageRenderer.prototype.loadMessage = function(socket,messages){
-  console.log(messages);
-  for (let i = 0; i < messages.length; i++) {
-    let msg = messages[i];
-    socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
 
-  }
-};
+  return new Promise((resolve,reject)=>{
+    if(this.agoLoadMessageTargetRoom === messages[0].roomId) {
+      return reject({MessageRenderer:this,roomId:messages[0].roomId});
+    }
+    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+messages[0].roomId);
 
-MessageRenderer.prototype.addMessageSendListener = function(id,event,socket){
-  this.document.getElementById(id).addEventListener(event, ()=>{
-    this.sendMessage(socket);
+    for (let i = 0; i < messages.length; i++) {
+      let msg = messages[i];
+      socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
+    }
+
+    return resolve({MessageRenderer:this,roomId:messages[0].roomId});
   });
 };
 
@@ -104,7 +105,7 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
     modal.createRoom();
     self.scrollToBottom('room-area');
     modal.dismissModal();
-  };
+  }
 };
 
 // 방 생성 성공 후 버튼에 클릭 이벤트 추가
@@ -120,11 +121,6 @@ MessageRenderer.prototype.addClickEventListener = function(result) {
   });
 };
 
-MessageRenderer.prototype.sendMessage = function(socket){
-  const message = this.document.getElementById('messageInput').value;
-  this.renderMessage(message,this.messageType.MY_MESSAGE,socket.user.nickName,socket.args.picture);
-  socket.emit('message-public',{token:socket.access_token,message:message});
-};
 
 MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   const textBox = this.document.getElementById('messageInput');
@@ -162,7 +158,23 @@ MessageRenderer.prototype.addChangeMessageSendFailListener = function () {
   sendStatus[0].innerText = '!';
   sendStatus[0].className = 'my-message-block-info-sendStatus fail';
 };
-
+MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
+  const createRoomButton = roomList.lastElementChild;
+  const room_item = this.RoomItemFactory.createRoomItem(this.document);
+  this.RoomItemFactory.prepareRoomItem(room_item,room);
+  this.RoomItemFactory.render(room_item);
+  roomList.insertBefore(room_item.room_item_div,createRoomButton);
+  return room_item;
+};
+MessageRenderer.prototype.agoLoadMessageIsResolve = function(result){
+  console.log(result.roomId+'\'s message was reloaded');
+  result.MessageRenderer.agoLoadMessageTargetRoom = result.roomId;
+  result.MessageRenderer.agoLoadMessageIsExcuted = true;
+};
+MessageRenderer.prototype.agoLoadMessageIsReject = function(result){
+  console.log(result.roomId+'\'s message reload request rejected');
+  result.MessageRenderer.agoLoadMessageIsExcuted = true;
+};
 MessageRenderer.prototype.renderMessage = function (message, type, image) {
   const self = this;
 

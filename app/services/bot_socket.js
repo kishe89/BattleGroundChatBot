@@ -19,10 +19,11 @@ function connectToBot(args, token, url, renderer) {
   });
   socket.on('news-bot',(message)=>{
     console.log(message);
-    renderer.renderMessage(message.createdMessage,renderer.messageType.ANOTHER_MESSAGE,socket.id);
+    //renderer.renderMessage(message.createdMessage,renderer.messageType.ANOTHER_MESSAGE,socket.id);
   });
   socket.on('message-public', function (message) {
-    renderer.renderMessage(message.createdMessage,renderer.messageType.ANOTHER_MESSAGE,socket.id);
+    console.log(message);
+    //renderer.renderMessage(message.createdMessage,renderer.messageType.ANOTHER_MESSAGE,socket.id);
   });
   return socket;
 };

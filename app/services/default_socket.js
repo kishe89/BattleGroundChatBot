@@ -51,7 +51,9 @@ function connectToDefault(args,token,url,renderer) {
   // 방 로드 -> 해당 방 메세지 로드
   socket.on('message-get-in-room-success',(room)=>{
     console.log(room);
-    renderer.loadMessage(socket,room.messages);
+    renderer.loadMessage(socket,room.messages)
+      .then(renderer.agoLoadMessageIsResolve)
+      .catch(renderer.agoLoadMessageIsReject);
   });
 
   socket.on('message-get-in-room-fail',(e)=>{
