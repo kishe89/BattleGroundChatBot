@@ -43,10 +43,12 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   }
 };
 
-MessageRenderer.prototype.loadMessage = function(messages){
+MessageRenderer.prototype.loadMessage = function(socket,messages){
+  console.log(messages);
   for (let i = 0; i < messages.length; i++) {
-    let msg = messages.messages[i];
-    this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE, socket.user.nickName, socket.args.picture);
+    let msg = messages[i];
+    socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
+
   }
 };
 
