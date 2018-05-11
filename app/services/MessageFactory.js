@@ -31,6 +31,7 @@ MessageFactory.prototype.createMyMessageRow = function (document) {
 };
 
 MessageFactory.prototype.prepareMyMessageRow = (messageRow,message,image)=>{
+  messageRow.message_row.id = message._id;
   messageRow.message_row.className = 'my-message-block';
   messageRow.message_info_row.className = 'my-message-block-info';
   messageRow.message_info_nick.innerText = message.author.nickName;
@@ -46,6 +47,7 @@ MessageFactory.prototype.prepareMyMessageRow = (messageRow,message,image)=>{
   return messageRow;
 };
 MessageFactory.prototype.prepareAnotherMessageRow = (messageRow,message,image)=>{
+  messageRow.message_row.id = message._id;
   messageRow.message_row.className = 'another-message-block';
   messageRow.message_info_row.className = 'another-message-block-info';
   messageRow.message_info_nick.innerText = message.author.nickName;
