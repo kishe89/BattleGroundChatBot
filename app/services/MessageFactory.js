@@ -60,11 +60,11 @@ MessageFactory.prototype.prepareAnotherMessageRow = (messageRow,message,image)=>
 MessageFactory.prototype.prepareBotMessageRow = (messageRow,name,message,image)=>{
   messageRow.message_row.className = 'another-message-block';
   messageRow.message_info_row.className = 'another-message-block-info';
-  messageRow.message_info_nick.innerText = name;
+  messageRow.message_info_nick.innerText = message.author.nickName;
   messageRow.message_info_nick.className = 'another-message-block-info-nick';
-  messageRow.message_info_timestamp.innerText = new Date(Date.now()).toLocaleString();
+  messageRow.message_info_timestamp.innerText = message.CreatedAt.toLocaleString();
   messageRow.message_info_timestamp.className = 'another-message-block-info-timestamp';
-  messageRow.message_content.innerText = message;
+  messageRow.message_content.innerText = message.textMessage;
   messageRow.message_content.className = 'another-message-block-message';
   messageRow.profile_img.className = 'another-message-block-profile';
   return messageRow;

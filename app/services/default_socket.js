@@ -2,6 +2,7 @@
 
 function connectToDefault(args,token,url,renderer) {
   let agoConnected = false;
+  let roomInitialized = false;
   const socket = require('socket.io-client')(url,{
     transports: ['websocket'],
     query:{
@@ -41,7 +42,10 @@ function connectToDefault(args,token,url,renderer) {
     socket.user = access_token.user;
     socket.access_token = access_token.access_token;
     token = access_token.access_token;
-    renderer.loadRoomList('room-area', socket);
+    if(!roomInitialized) {
+      renderer.loadRoomList('room-area', socket);
+      roomInitialized = true;
+    }
   });
 
   // 방 로드 -> 해당 방 메세지 로드
