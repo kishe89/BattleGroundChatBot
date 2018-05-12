@@ -126,7 +126,7 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
 };
 
 // 방 생성 성공 후 버튼에 클릭 이벤트 추가
-MessageRenderer.prototype.addClickEventListener = function(result) {
+MessageRenderer.prototype.addClickEventListener = function() {
   // 생성 된 방 button List element
   let rooms = document.getElementsByClassName('room-item');
   // 마지막으로 생성 된 방
