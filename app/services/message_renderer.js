@@ -6,19 +6,23 @@ function MessageRenderer(document,window) {
   }
   const MessageFactory = require('../services/MessageFactory');
   const RoomItemFactory = require('../services/RoomItemFactory');
+  const RoomActionBar = require('../services/RoomActionBar');
   this.document = document;
   this.window = window;
   this.messageType = require('../services/message_type');
   this.MessageFactory = new MessageFactory();
   this.RoomItemFactory = new RoomItemFactory();
+  this.RoomActionBar = new RoomActionBar(document);
   this.agoLoadMessageTargetRoom = '';
   this.agoLoadMessageIsExcuted = true;
+
 }
 
 MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const joinRoomList = socket.user.JoinRoomList;
   const self = this;
+  this.RoomActionBar.InitializeActionBar();
   /**
    * @description This condition explains that there is no need to reload.
    */
@@ -58,7 +62,20 @@ MessageRenderer.prototype.loadMessage = function(socket,messages){
     return resolve({MessageRenderer:this,roomId:messages[0].roomId});
   });
 };
-
+MessageRenderer.prototype.loadParticipant = function (socket, room) {
+  const MemberView = require('../services/MemberView');
+  return new Promise((resolve,reject)=>{
+    if(!room){
+      return reject(new Error('loadParticipant need room parameter'));
+    }
+    room.Participant.forEach((participant)=>{
+      console.log(participant);
+      const memberView = new MemberView(this.document,participant.nickName,socket.args.picture);
+      this.RoomActionBar.MemberListView.addRow(memberView.view);
+    });
+    return resolve(true);
+  });
+};
 MessageRenderer.prototype.addPrivacyMessageSendListener = function(id, event, socket){
   this.document.getElementById(id).addEventListener(event, ()=>{
     this.sendPrivacyMessage(socket);
