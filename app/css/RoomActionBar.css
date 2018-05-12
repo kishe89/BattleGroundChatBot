@@ -1,0 +1,73 @@
+.RoomActionBar{
+    position: relative;
+    display: block;
+    width:100%;
+    height: 0;
+    visibility: hidden;
+}
+.RoomActionBar.unfold{
+    height: 120px;
+    visibility: visible;
+}
+
+.RoomActionBar-fold-button{
+    position: absolute;
+    float: left;
+    z-index: 4;
+    width: 45px;
+    height: 20px;
+    margin-left: calc(50% - 45px);
+    background:#5168d0;
+    border-radius: 0 0 25px 25px;
+    box-shadow: #555555;
+    transition: background 1s, border-radius 0.5s;
+}
+.RoomActionBar-fold-button.unfold{
+    border-radius: 25px 25px 0 0;
+}
+
+.RoomActionBar-fold-button:hover{
+    background:#6679d0;
+}
+.RoomActionBar-fold-button:active{
+    background:#96a7d0;
+}
+
+.member-area{
+    position: relative;
+    display: block;
+    overflow: auto;
+    width: 100%;
+    height: 60px;
+    background: darkgray;
+}
+.action-area{
+    position: relative;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 60px;
+    background: darkcyan;
+}
+.action-button{
+    float: left;
+    position: relative;
+    width: 10%;
+    max-width:60px;
+    height: 60px;
+    margin-left: 10%;
+    text-align: center;
+    line-height: 60px;
+}
+.action-button.invite{
+    background: #8f8f8f;
+}
+.action-button.leave{
+    background: #8f8f8f;
+}
+.action-button:hover{
+    background: #2d248f;
+}
+.action-button:active{
+    background: #8f3323;
+}
