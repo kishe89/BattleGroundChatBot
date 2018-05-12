@@ -5,8 +5,10 @@ function RoomActionBar(document) {
     throw new TypeError('RoomActionBar must be created with new keyword');
   }
   const MemberListView = require('../services/MemberListView');
+  const RoomActionBarFoldButton = require('../services/RoomActionBarFoldButton');
   this.ActionBar = document.getElementById('RoomActionBar');
   this.MemberListView = new MemberListView(document);
+  this.RoomActionBarFoldButton = new RoomActionBarFoldButton(document);
   this.EVENT = 'click';
 };
 
