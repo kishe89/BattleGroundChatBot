@@ -46,20 +46,23 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   }
 };
 
-MessageRenderer.prototype.loadMessage = function(socket,messages){
+MessageRenderer.prototype.loadMessage = function(socket,room){
 
   return new Promise((resolve,reject)=>{
-    if(this.agoLoadMessageTargetRoom === messages[0].roomId) {
-      return reject({MessageRenderer:this,roomId:messages[0].roomId});
+    if(room.messages.length === 0){
+      return reject({MessageRenderer:this,roomId:room._id});
     }
-    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+messages[0].roomId);
+    if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
+      return reject({MessageRenderer:this,roomId:room.messages[0].roomId});
+    }
+    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
 
-    for (let i = 0; i < messages.length; i++) {
-      let msg = messages[i];
+    for (let i = 0; i < room.messages.length; i++) {
+      let msg = room.messages[i];
       socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
     }
 
-    return resolve({MessageRenderer:this,roomId:messages[0].roomId});
+    return resolve({MessageRenderer:this,roomId:room._id});
   });
 };
 MessageRenderer.prototype.loadParticipant = function (socket, room) {
@@ -133,8 +136,9 @@ MessageRenderer.prototype.addClickEventListener = function() {
   let lastRoom = rooms.item(rooms.length - 1);
 
   // 방 button click시에 click 된 방의 id 및 접속 유저 정보(access_token) 전송
-  lastRoom.addEventListener('click', function() {
-    console.log(selectedRoom.room_id);
+  lastRoom.addEventListener('click', function(event) {
+    console.log(event.srcElement);
+    // console.log(selectedRoom.room_id);
   });
 };
 
