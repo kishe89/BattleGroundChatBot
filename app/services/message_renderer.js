@@ -7,12 +7,14 @@ function MessageRenderer(document,window) {
   const MessageFactory = require('../services/MessageFactory');
   const RoomItemFactory = require('../services/RoomItemFactory');
   const RoomActionBar = require('../services/RoomActionBar');
+  const MessageListView = require('../services/MessageListView');
   this.document = document;
   this.window = window;
   this.messageType = require('../services/message_type');
   this.MessageFactory = new MessageFactory();
   this.RoomItemFactory = new RoomItemFactory();
   this.RoomActionBar = new RoomActionBar(document);
+  this.MessageListView = new MessageListView(document);
   this.agoLoadMessageTargetRoom = '';
   this.agoLoadMessageIsExcuted = true;
 
@@ -194,6 +196,7 @@ MessageRenderer.prototype.agoLoadMessageIsResolve = function(result){
 };
 MessageRenderer.prototype.agoLoadMessageIsReject = function(result){
   console.log(result.roomId+'\'s message reload request rejected');
+  result.MessageRenderer.agoLoadMessageTargetRoom = result.roomId;
   result.MessageRenderer.agoLoadMessageIsExcuted = true;
 };
 MessageRenderer.prototype.renderMessage = function (message, type, image) {
