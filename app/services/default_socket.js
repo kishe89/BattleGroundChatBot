@@ -58,7 +58,7 @@ function connectToDefault(args,token,url,renderer) {
       .catch((e)=>{
         console.log(e);
       });
-    renderer.loadMessage(socket,room.messages)
+    renderer.loadMessage(socket,room)
       .then(renderer.agoLoadMessageIsResolve)
       .catch(renderer.agoLoadMessageIsReject);
   });
