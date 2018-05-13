@@ -25,6 +25,7 @@ RoomActionBar.prototype.InitializeActionBar = function () {
     manager.toggleClass(self.ActionBar,'unfold');
     manager.toggleClass(event.srcElement,'unfold');
   };
+  this.MemberListView.clearRow();
 };
 RoomActionBar.prototype.removeAction = function () {
   this.ActionBar.removeEventListener(this.EVENT,this.ActionBarEventHandller);
@@ -32,6 +33,5 @@ RoomActionBar.prototype.removeAction = function () {
 };
 RoomActionBar.prototype.ActionBarEventHandller = function (event) {
   const view = event.srcElement;
-
 };
 module.exports = RoomActionBar;

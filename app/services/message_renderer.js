@@ -24,7 +24,8 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const joinRoomList = socket.user.JoinRoomList;
   const self = this;
-  this.RoomActionBar.InitializeActionBar();
+  const roomActionBar = this.RoomActionBar;
+  roomActionBar.InitializeActionBar();
   /**
    * @description This condition explains that there is no need to reload.
    */
@@ -73,6 +74,7 @@ MessageRenderer.prototype.loadParticipant = function (socket, room) {
     if(!room){
       return reject(new Error('loadParticipant need room parameter'));
     }
+    this.RoomActionBar.MemberListView.clearRow();
     room.Participant.forEach((participant)=>{
       console.log(participant);
       const memberView = new MemberView(this.document,participant.nickName,socket.args.picture);
