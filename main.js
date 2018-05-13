@@ -10,7 +10,6 @@ const fbManager = new FBManager(app,axios,path,fs,FB);
 
 let win;
 
-
 function createAuthWindow() {
   fbManager.login(win,BrowserWindow);
 };
