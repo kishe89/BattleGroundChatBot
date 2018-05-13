@@ -6,6 +6,7 @@ function MessageFactory() {
   }
   this.moment = require('moment');
   this.utcOffset = this.moment().utcOffset();
+  this.moment.locale('ko');
 }
 
 MessageFactory.prototype.createMessageRow = function (document) {
@@ -40,8 +41,6 @@ MessageFactory.prototype.prepareMyMessageRow = function(messageRow,message,image
   messageRow.message_info_nick.className = 'my-message-block-info-nick';
 
   //messageRow.message_info_timestamp.innerText = message.CreatedAt.toLocaleString();
-  console.log(message.CreatedAt);
-  this.moment.locale('ko');
   messageRow.message_info_timestamp.innerText = this.moment.utc(message.CreatedAt).utcOffset(this.utcOffset).format("LLLL");
   messageRow.message_info_timestamp.className = 'my-message-block-info-timestamp';
   messageRow.message_info_sendStatus.innerText = ' ...';
@@ -58,7 +57,7 @@ MessageFactory.prototype.prepareAnotherMessageRow = function(messageRow,message,
   messageRow.message_info_row.className = 'another-message-block-info';
   messageRow.message_info_nick.innerText = message.author.nickName;
   messageRow.message_info_nick.className = 'another-message-block-info-nick';
-  messageRow.message_info_timestamp.innerText = message.CreatedAt.toLocaleString();
+  messageRow.message_info_timestamp.innerText = this.moment.utc(message.CreatedAt).utcOffset(this.utcOffset).format("LLLL");
   messageRow.message_info_timestamp.className = 'another-message-block-info-timestamp';
   messageRow.message_content.innerText = message.textMessage;
   messageRow.message_content.className = 'another-message-block-message';
@@ -70,7 +69,7 @@ MessageFactory.prototype.prepareBotMessageRow = function(messageRow,name,message
   messageRow.message_info_row.className = 'another-message-block-info';
   messageRow.message_info_nick.innerText = message.author.nickName;
   messageRow.message_info_nick.className = 'another-message-block-info-nick';
-  messageRow.message_info_timestamp.innerText = message.CreatedAt.toLocaleString();
+  messageRow.message_info_timestamp.innerText = this.moment.utc(message.CreatedAt).utcOffset(this.utcOffset).format("LLLL");
   messageRow.message_info_timestamp.className = 'another-message-block-info-timestamp';
   messageRow.message_content.innerText = message.textMessage;
   messageRow.message_content.className = 'another-message-block-message';

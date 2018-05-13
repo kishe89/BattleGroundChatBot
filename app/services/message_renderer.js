@@ -149,13 +149,15 @@ MessageRenderer.prototype.addClickEventListener = function() {
 
 MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   const textBox = this.document.getElementById('messageInput');
-
+  const moment = require('moment');
+  const utcOffset = moment().utcOffset();
+  moment.locale('ko');
   // textbox 공백 체크 후에 메세지 전송 및 render 처리
   if(textBox.value !== '') {
     let msg = textBox.value;
     const targetRoom = socket.user.JoinRoomList[0];
     const createdMessage = {
-      CreatedAt:new Date(Date.now()).toLocaleString(),
+      CreatedAt:new Date(Date.now()).toUTCString(),
       author:{
         nickName:socket.user.nickName
       },
@@ -171,7 +173,7 @@ MessageRenderer.prototype.sendPrivacyMessage = function(socket){
     },(message)=>{
       messageRow.message_info_sendStatus.innerText = 'OK';
       messageRow.message_info_sendStatus.className = 'my-message-block-info-sendStatus success';
-      messageRow.message_info_timestamp.innerText = message.createdMessage.CreatedAt.toLocaleString();
+      messageRow.message_info_timestamp.innerText = moment.utc(message.CreatedAt).utcOffset(utcOffset).format("LLL");
     });
 
     textBox.value = '';
