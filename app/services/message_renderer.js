@@ -26,7 +26,7 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomActionBar = this.RoomActionBar;
   const ClassManager = require('../services/cssHandler/ClassManager');
   const classManager = new ClassManager();
-  roomActionBar.InitializeActionBar();
+  roomActionBar.InitializeActionBar(roomList, socket);
   /**
    * @description This condition explains that there is no need to reload.
    */
