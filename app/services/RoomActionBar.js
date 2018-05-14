@@ -25,7 +25,6 @@ RoomActionBar.prototype.InitializeActionBar = function () {
     manager.toggleClass(self.ActionBar,'unfold');
     manager.toggleClass(event.srcElement,'unfold');
   };
-  this.MemberListView.clearRow();
 };
 RoomActionBar.prototype.removeAction = function () {
   this.ActionBar.removeEventListener(this.EVENT,this.ActionBarEventHandller);

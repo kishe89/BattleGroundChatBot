@@ -17,7 +17,6 @@ function MessageRenderer(document,window) {
   this.MessageListView = new MessageListView(document);
   this.agoLoadMessageTargetRoom = '';
   this.agoLoadMessageIsExcuted = true;
-
 }
 
 MessageRenderer.prototype.loadRoomList = function(id, socket) {
@@ -44,7 +43,6 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
       return;
     }
     const selectedRoom = event.srcElement;
-    console.log(selectedRoom.id);
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   }
 };
@@ -228,7 +226,7 @@ MessageRenderer.prototype.renderMessage = function (message, type, image) {
     return myMessageRow;
 };
 
-// 신규 메세지 수신 후 자동으로 스크롤을 화면 제일 하단으로 내림.
+// Mesaage view scroll to bottom after receive message.
 MessageRenderer.prototype.scrollToBottom = function (elementId) {
   const messageArea = this.document.getElementById(elementId);
   messageArea.scrollTop = messageArea.scrollHeight;
