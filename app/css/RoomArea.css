@@ -17,13 +17,21 @@
     line-height: 90px;
     margin: auto;
     border-radius: 50%;
-    border: 3px #333333;
-    background: #166dff;
-    transition: border 0.2s;
+    box-shadow: 0px 0px 1px 1px #888888;
+    background: #666666;
+    transition: box-shadow 0.2s, background 1.0s;
 }
-
+.room-item p{
+    color: #d3e6ff;
+}
+.room-item:hover{
+    background: #888888;
+}
+.room-item:active{
+    background: #bbbbbb;
+}
 .room-item.selected{
-    border: 3px solid #ffffff;
+    box-shadow: 0px 0px 3px 3px #ffffff;
 }
 
 .room-create{
