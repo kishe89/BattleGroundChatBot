@@ -1,0 +1,43 @@
+.room-area{
+    float: left;
+    display: block;
+    position: relative;
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
+    height: 100%;
+    overflow: auto;
+    background: #323232;
+}
+.room-item{
+    display: block;
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    line-height: 90px;
+    margin: auto;
+    border-radius: 50%;
+    border: 3px #333333;
+    background: #166dff;
+    transition: border 0.2s;
+}
+
+.room-item.selected{
+    border: 3px solid #ffffff;
+}
+
+.room-create{
+    display: block;
+    width: 90%;
+    margin: 15% auto;
+}
+.room-create-image{
+    width: 100%;
+    height: 100%;
+}
+.room-create-image:active{
+    content: url("../../public/images/plus-button-active.svg");
+}
+.room-create-image:hover{
+    content: url("../../public/images/plus-button-hover.svg");
+}

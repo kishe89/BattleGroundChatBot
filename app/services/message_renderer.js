@@ -24,6 +24,8 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const joinRoomList = socket.user.JoinRoomList;
   const self = this;
   const roomActionBar = this.RoomActionBar;
+  const ClassManager = require('../services/cssHandler/ClassManager');
+  const classManager = new ClassManager();
   roomActionBar.InitializeActionBar();
   /**
    * @description This condition explains that there is no need to reload.
@@ -42,7 +44,10 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
     }else{
       return;
     }
-    const selectedRoom = event.srcElement;
+
+    const selectedRoom = event.srcElement.parentNode;
+    console.log(selectedRoom);
+    classManager.toggleClass(selectedRoom,'selected');
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   }
 };
@@ -75,7 +80,7 @@ MessageRenderer.prototype.loadParticipant = function (socket, room) {
     this.RoomActionBar.MemberListView.clearRow();
     room.Participant.forEach((participant)=>{
       console.log(participant);
-      const memberView = new MemberView(this.document,participant.nickName,socket.args.picture);
+      const memberView = new MemberView(this.document,participant,socket.args.picture);
       this.RoomActionBar.MemberListView.addRow(memberView.view);
     });
     return resolve(true);
