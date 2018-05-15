@@ -2,17 +2,18 @@
 
 'use strict';
 
-function RoomItemFactory() {
+function RoomItemFactory(document) {
   if(!(this instanceof RoomItemFactory)){
     throw new TypeError('RoomItemFactory must be created with new keyword');
   }
   const ClassManager = require('../services/cssHandler/ClassManager');
   this.classManager = new ClassManager();
+  this.RoomItemList = document.getElementById('room-area');
   this.STATUS = 'selected';
 }
 
 RoomItemFactory.prototype.createRoomItem = function (document) {
-  this.RoomItemList = document.getElementById('room-area');
+
   return {
     room_item_text_p : document.createElement('p'),
     room_item_div : document.createElement('div')
@@ -26,6 +27,8 @@ RoomItemFactory.prototype.prepareRoomItem = (roomItem,room)=>{
   return roomItem;
 };
 RoomItemFactory.prototype.toggleSelected = function(roomItem){
+  const agoSelectedItem= this.RoomItemList.querySelector('.room-item.selected');
+  this.classManager.toggleClass(agoSelectedItem,this.STATUS);
   this.classManager.toggleClass(roomItem,this.STATUS);
 };
 RoomItemFactory.prototype.render = (roomItem)=>{
