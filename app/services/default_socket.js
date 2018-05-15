@@ -97,7 +97,7 @@ function connectToDefault(args,token,url,renderer) {
 
   socket.on('leaveRoom_Success', (result)=>{
     console.log('leaveroom success!!');
-    renderer.addLeaveRoomListener('click', result);
+    // renderer.addLeaveRoomListener('click', result);
 
   });
   socket.on('leaveRoom_Fail', (e) => {
