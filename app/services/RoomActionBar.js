@@ -35,6 +35,7 @@ RoomActionBar.prototype.InitializeActionBar = function (roomList, socket) {
       token:socket.access_token,
       room_id:selectRoom[0].id
     });
+    console.log(socket);
   };
 };
 RoomActionBar.prototype.removeAction = function () {

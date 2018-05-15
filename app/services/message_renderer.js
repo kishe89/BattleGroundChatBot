@@ -149,7 +149,6 @@ MessageRenderer.prototype.addClickEventListener = function() {
   });
 };
 
-
 MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   const textBox = this.document.getElementById('messageInput');
   const moment = require('moment');
