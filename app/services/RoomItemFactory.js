@@ -1,7 +1,5 @@
 'use strict';
 
-'use strict';
-
 function RoomItemFactory(document) {
   if(!(this instanceof RoomItemFactory)){
     throw new TypeError('RoomItemFactory must be created with new keyword');
