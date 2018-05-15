@@ -94,6 +94,15 @@ function connectToDefault(args,token,url,renderer) {
       renderer.addCreateRoomListener('createRoom','click',socket);
     }
   });
+
+  socket.on('leaveRoom_Success', (result)=>{
+    console.log('leaveroom success!!');
+    renderer.addLeaveRoomListener('click', result);
+
+  });
+  socket.on('leaveRoom_Fail', (e) => {
+    console.log(e);
+  })
   return socket;
 }
 
