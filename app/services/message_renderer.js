@@ -12,7 +12,7 @@ function MessageRenderer(document,window) {
   this.window = window;
   this.messageType = require('../services/message_type');
   this.MessageFactory = new MessageFactory();
-  this.RoomItemFactory = new RoomItemFactory();
+  this.RoomItemFactory = new RoomItemFactory(document);
   this.RoomActionBar = new RoomActionBar(document);
   this.MessageListView = new MessageListView(document);
   this.agoLoadMessageTargetRoom = '';
