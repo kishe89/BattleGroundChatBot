@@ -187,6 +187,7 @@ MessageRenderer.prototype.addChangeMessageSendFailListener = function () {
   sendStatus[0].innerText = '!';
   sendStatus[0].className = 'my-message-block-info-sendStatus fail';
 };
+
 MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
   const createRoomButton = roomList.lastElementChild;
   const room_item = this.RoomItemFactory.createRoomItem(this.document);
@@ -195,6 +196,11 @@ MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
   roomList.insertBefore(room_item.room_item_div,createRoomButton);
   return room_item;
 };
+
+MessageRenderer.prototype.addLeaveRoomListener = function () {
+  console.log(this.agoLoadMessageTargetRoom);
+};
+
 MessageRenderer.prototype.agoLoadMessageIsResolve = function(result){
   console.log(result.roomId+'\'s message was reloaded');
   result.MessageRenderer.agoLoadMessageTargetRoom = result.roomId;
