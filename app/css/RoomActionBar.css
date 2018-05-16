@@ -4,9 +4,10 @@
     overflow: hidden;
     z-index: 4;
     display: block;
-    width:100%;
+    width:calc(100% - 100px);    /*-100px is RoomArea width*/
     height: 0;
     visibility: visible;
+    border-radius: 0%;
     transition: height 1s;
 }
 .RoomActionBar.unfold{
@@ -46,7 +47,7 @@
     overflow: auto;
     width: 100%;
     height: 60px;
-    background: darkgray;
+    background: #a9a9a9;
 }
 .MemberView{
     float: left;
@@ -77,7 +78,7 @@
     overflow: hidden;
     width: 100%;
     height: 60px;
-    background: darkcyan;
+    background: #a9a9a9;
 }
 .action-button{
     float: left;
@@ -85,7 +86,7 @@
     width: 15%;
     /*max-width:60px;*/
     height: 60px;
-    margin-left: 5%;
+    margin:auto;
     text-align: center;
     line-height: 60px;
 }
