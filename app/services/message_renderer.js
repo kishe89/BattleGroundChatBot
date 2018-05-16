@@ -22,16 +22,17 @@ function MessageRenderer(document,window) {
 MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const joinRoomList = socket.user.JoinRoomList;
-  const self = this;
+  const self = this;// message_renderer
   const roomActionBar = this.RoomActionBar;
   const ClassManager = require('../services/cssHandler/ClassManager');
-  const classManager = new ClassManager();
+  const manager = new ClassManager();
   roomActionBar.InitializeActionBar(roomList, socket);
   /**
    * @description This condition explains that there is no need to reload.
    */
   if(roomList.childElementCount === joinRoomList.length+2)return;
 
+  console.log(socket);
 
   for(let i=0; i < joinRoomList.length; i++){
     const roomItem= this.renderRoomItem(roomList,joinRoomList[i]);
@@ -46,12 +47,10 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
     }
 
     const selectedRoom = event.srcElement.parentNode;
-    console.log(selectedRoom);
-    classManager.toggleClass(selectedRoom,'selected');
+    manager.toggleClass(selectedRoom, 'selected');
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   }
 };
-
 MessageRenderer.prototype.loadMessage = function(socket,room){
 
   return new Promise((resolve,reject)=>{
@@ -79,7 +78,6 @@ MessageRenderer.prototype.loadParticipant = function (socket, room) {
     }
     this.RoomActionBar.MemberListView.clearRow();
     room.Participant.forEach((participant)=>{
-      console.log(participant);
       const memberView = new MemberView(this.document,participant,socket.args.picture);
       this.RoomActionBar.MemberListView.addRow(memberView.view);
     });
@@ -91,7 +89,6 @@ MessageRenderer.prototype.addPrivacyMessageSendListener = function(id, event, so
     this.sendPrivacyMessage(socket);
   });
 };
-
 MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
   const self = this;
   let CreateRoomModal = require('../services/CreateRoomModal');
@@ -134,19 +131,32 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
     modal.dismissModal();
   }
 };
-
-// 방 생성 성공 후 버튼에 클릭 이벤트 추가
-MessageRenderer.prototype.addClickEventListener = function() {
+MessageRenderer.prototype.addClickEventListener = function(result, socket) {
+  const roomActionBar = this.RoomActionBar;
+  const ClassManager = require('../services/cssHandler/ClassManager');
+  const manager = new ClassManager();
+  const self = this;
   // 생성 된 방 button List element
-  let rooms = document.getElementsByClassName('room-item');
+  const rooms = document.getElementsByClassName('room-item');
   // 마지막으로 생성 된 방
-  let lastRoom = rooms.item(rooms.length - 1);
+  const lastRoom = rooms.item(rooms.length - 1);
+  console.log(socket);
 
   // 방 button click시에 click 된 방의 id 및 접속 유저 정보(access_token) 전송
-  lastRoom.addEventListener('click', function(event) {
-    console.log(event.srcElement);
-    // console.log(selectedRoom.room_id);
-  });
+  lastRoom.addEventListener('click', loadRoomInfo);
+
+  // must refactoring!!
+  function loadRoomInfo(event) {
+    if(self.agoLoadMessageIsExcuted){
+      self.agoLoadMessageIsExcuted = false;
+    }else{
+      return;
+    }
+
+    const selectedRoom = event.srcElement.parentNode;
+    manager.toggleClass(selectedRoom, 'selected');
+    socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
+  }
 };
 
 MessageRenderer.prototype.sendPrivacyMessage = function(socket){
@@ -197,8 +207,13 @@ MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
   return room_item;
 };
 
-MessageRenderer.prototype.addLeaveRoomListener = function () {
-  console.log(this.agoLoadMessageTargetRoom);
+/*
+* description : It is success that leave room.
+* para
+*  - result : success result.
+*/
+MessageRenderer.prototype.addLeaveRoomListener = function (result) {
+  this.RoomItemFactory.removeRoomItem(result);
 };
 
 MessageRenderer.prototype.agoLoadMessageIsResolve = function(result){
