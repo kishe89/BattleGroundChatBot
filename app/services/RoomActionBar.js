@@ -12,9 +12,8 @@ function RoomActionBar(document) {
   this.EVENT = 'click';
 };
 
-RoomActionBar.prototype.InitializeActionBar = function (roomList, socket) {
+RoomActionBar.prototype.InitializeActionBar = function (socket) {
   const self = this;
-  console.log(self);
   this.removeAction().addEventListener(this.EVENT,this.ActionBarEventHandller);
   removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler);
   self.ActionLeaveRoomButton.addEventListener(self.EVENT, removeRoomInfo);
@@ -29,13 +28,11 @@ RoomActionBar.prototype.InitializeActionBar = function (roomList, socket) {
     manager.toggleClass(event.srcElement,'unfold');
   };
   function removeRoomInfo(){
-    const selectRoom = roomList.getElementsByClassName('room-item selected');
-    console.log(selectRoom[0].id);
+    const selectRoom = document.getElementsByClassName('room-item selected');
     socket.emit('leaveRoom', {
       token:socket.access_token,
       room_id:selectRoom[0].id
     });
-    console.log(socket);
   };
 };
 RoomActionBar.prototype.removeAction = function () {

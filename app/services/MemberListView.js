@@ -45,7 +45,6 @@ MemberListView.prototype.clearRow = function () {
   // member list
   let mems = this.view;
   mems.innerHTML = '';
-  console.log(mems);
 };
 
 module.exports = MemberListView;
