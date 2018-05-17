@@ -24,9 +24,7 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const joinRoomList = socket.user.JoinRoomList;
   const self = this;// message_renderer
   const roomActionBar = this.RoomActionBar;
-  const ClassManager = require('../services/cssHandler/ClassManager');
-  const manager = new ClassManager();
-  roomActionBar.InitializeActionBar(roomList, socket);
+  roomActionBar.InitializeActionBar(socket);
   /**
    * @description This condition explains that there is no need to reload.
    */
@@ -47,7 +45,7 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
     }
 
     const selectedRoom = event.srcElement.parentNode;
-    manager.toggleClass(selectedRoom, 'selected');
+
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   }
 };
@@ -126,12 +124,11 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
     };
 
     socket.emit('createRoom',message );
-    modal.createRoom();
     self.scrollToBottom('room-area');
     modal.dismissModal();
   }
 };
-MessageRenderer.prototype.addClickEventListener = function(result, socket) {
+MessageRenderer.prototype.addClickEventListener = function(socket) {
   const roomActionBar = this.RoomActionBar;
   const ClassManager = require('../services/cssHandler/ClassManager');
   const manager = new ClassManager();
@@ -140,7 +137,6 @@ MessageRenderer.prototype.addClickEventListener = function(result, socket) {
   const rooms = document.getElementsByClassName('room-item');
   // 마지막으로 생성 된 방
   const lastRoom = rooms.item(rooms.length - 1);
-  console.log(socket);
 
   // 방 button click시에 click 된 방의 id 및 접속 유저 정보(access_token) 전송
   lastRoom.addEventListener('click', loadRoomInfo);
@@ -167,7 +163,7 @@ MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   // textbox 공백 체크 후에 메세지 전송 및 render 처리
   if(textBox.value !== '') {
     let msg = textBox.value;
-    const targetRoom = socket.user.JoinRoomList[0];
+    const targetRoom = this.agoLoadMessageTargetRoom;
     const createdMessage = {
       CreatedAt:new Date(Date.now()).toUTCString(),
       author:{
@@ -178,7 +174,7 @@ MessageRenderer.prototype.sendPrivacyMessage = function(socket){
     const messageRow = this.renderMessage(createdMessage, this.messageType.MY_MESSAGE, socket.args.picture);
     // send message to server
     socket.emit('message-privacy', {
-      room_id: targetRoom._id,
+      room_id: targetRoom,
       token: socket.access_token,
       textMessage: msg,
       urlMessage: "test"

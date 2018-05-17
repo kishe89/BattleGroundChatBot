@@ -8,10 +8,6 @@ function CreateRoomModal(document) {
   const rating_ul = document.getElementById('rating-ul');
   const modal_input_rating = rating_ul.childNodes;
   const ratingDiv = document.getElementById('modal-input-rating');
-  const roomList = document.getElementById('room-area');
-  const createRoomButton = roomList.lastElementChild;
-  const room_item_text_p = document.createElement('p');
-  const room_item_div = document.createElement('div');
 
   const getter = {
     getRoomName:()=>{
@@ -44,13 +40,6 @@ function CreateRoomModal(document) {
     RoomNameIsValid:()=>{
       const roomNameInput = document.getElementById('modal-input-roomName');
       return !(roomNameInput.value === '' || roomNameInput.value === undefined);
-    },
-    createRoom:()=>{
-      room_item_text_p.innerText= getter.getRoomName();
-      room_item_div.className = 'room-item';
-      room_item_div.id='room';
-      room_item_div.appendChild(room_item_text_p);
-      roomList.insertBefore(room_item_div,createRoomButton);
     },
     initRoomName:()=>{
       document.getElementById('modal-input-roomName').value= '';

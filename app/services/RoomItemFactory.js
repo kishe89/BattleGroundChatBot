@@ -25,8 +25,12 @@ RoomItemFactory.prototype.prepareRoomItem = (roomItem,room)=>{
 };
 RoomItemFactory.prototype.toggleSelected = function(roomItem){
   const agoSelectedItem = this.RoomItemList.querySelector('.room-item.selected');
-  this.classManager.toggleClass(agoSelectedItem,this.STATUS);
-  this.classManager.toggleClass(roomItem,this.STATUS);
+  if(agoSelectedItem){
+    this.classManager.toggleClass(agoSelectedItem,this.STATUS);
+  }
+  if(roomItem){
+    this.classManager.toggleClass(roomItem,this.STATUS);
+  }
 };
 RoomItemFactory.prototype.render = (roomItem)=>{
   roomItem.room_item_div.appendChild(roomItem.room_item_text_p);
@@ -34,6 +38,17 @@ RoomItemFactory.prototype.render = (roomItem)=>{
 };
 RoomItemFactory.prototype.removeRoomItem = function(result){
   this.RoomItemList.querySelector('.room-item.selected').remove();
+};
+RoomItemFactory.prototype.getRoomItemById = function (id) {
+  const items = this.RoomItemList.querySelectorAll('.room-item');
+  let item = undefined;
+  Array.from(items).forEach((roomItem)=>{
+    if(roomItem.id === id) {
+      item = roomItem;
+    }
+  });
+  console.log(item);
+  return item;
 };
 
 module.exports = RoomItemFactory;
