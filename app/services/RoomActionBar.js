@@ -29,6 +29,7 @@ RoomActionBar.prototype.InitializeActionBar = function (socket) {
   };
   function removeRoomInfo(){
     const selectRoom = document.getElementsByClassName('room-item selected');
+    console.log(socket);
     socket.emit('leaveRoom', {
       token:socket.access_token,
       room_id:selectRoom[0].id
