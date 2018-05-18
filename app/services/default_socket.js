@@ -27,7 +27,7 @@ function connectToDefault(args,token,url,renderer) {
     renderer.renderMessage(data.message,renderer.messageType.ANOTHER_MESSAGE,data.user.nickName,socket.args.picture);
   });
 
-  //방 생성 '성공' Event - 2018.04.30 추가
+  //Create room 'success' Event - 2018.04.30 add.
   socket.on('createRoom_Success', function(result){
     console.log(result);
     // 방 성공 후 처리
@@ -39,7 +39,7 @@ function connectToDefault(args,token,url,renderer) {
     renderer.addClickEventListener(socket);
   });
 
-  // 방 생성 '실패' Event - 2018.04.30 추가
+  // Create room 'fail' Event - 2018.04.30 add.
   socket.on('createRoom_Fail', function(e){
     console.log(e);
   });
@@ -54,7 +54,7 @@ function connectToDefault(args,token,url,renderer) {
     }
   });
 
-  // 방 로드 -> 해당 방 메세지 로드
+  // Load message in selected room.
   socket.on('message-get-in-room-success',(room)=>{
     if(renderer.agoLoadMessageTargetRoom !== room._id) {
       renderer.MessageListView.SwitchRoom(renderer,room);
@@ -100,8 +100,9 @@ function connectToDefault(args,token,url,renderer) {
 
   socket.on('leaveRoom_Success', (result)=>{
     console.log('leaveroom success!!');
-    renderer.addLeaveRoomListener(result);
+    renderer.addLeaveRoomListener(result, socket);
   });
+
   socket.on('leaveRoom_Fail', (e) => {
     console.log(e);
   });
