@@ -4,7 +4,7 @@
   "description": "My First Electron Project",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "webpack --watch",
     "build": "webpack -p",
     "electron": "electron ."
@@ -23,11 +23,12 @@
     "babel-preset-es2015": "~6.24.1",
     "babel-preset-es2017": "~6.24.1",
     "bodymovin": "~4.13.0",
-    "electron": "^1.8.6",
+    "electron": "^1.8.7",
     "fb": "~2.0.0",
+    "mocha": "~5.1.1",
     "moment": "~2.22.1",
     "socket.io": "~2.0.4",
-    "socket.io-client": "~2.1.0",
+    "socket.io-client": "^2.1.1",
     "webpack": "~4.3.0"
   },
   "author": "Kim Ji Woon",

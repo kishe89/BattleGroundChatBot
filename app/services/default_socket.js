@@ -104,7 +104,7 @@ function connectToDefault(args,token,url,renderer) {
   });
   socket.on('leaveRoom_Fail', (e) => {
     console.log(e);
-  })
+  });
   return socket;
 }
 
