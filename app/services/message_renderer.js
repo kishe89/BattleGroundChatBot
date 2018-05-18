@@ -50,7 +50,6 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   }
 };
 MessageRenderer.prototype.loadMessage = function(socket,room){
-
   return new Promise((resolve,reject)=>{
     if(room.messages.length === 0){
       return reject({MessageRenderer:this,roomId:room._id});
@@ -203,12 +202,31 @@ MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
   return room_item;
 };
 
-/*
-* description : It is success that leave room.
-* para
-*  - result : success result.
-*/
-MessageRenderer.prototype.addLeaveRoomListener = function (result) {
+MessageRenderer.prototype.addLeaveRoomListener = function (result, socket) {
+  const ClassManager = require('../services/cssHandler/ClassManager');
+  const manager = new ClassManager();
+  const roomArea = this.RoomItemFactory.RoomItemList.childNodes;
+  const divChildren = [];
+  let newRoomIndex = '';
+
+  for (let i = 0; i<roomArea.length; i++){
+    if(roomArea[i].nodeName === 'DIV'){
+      console.log(roomArea[i].nodeName);
+      divChildren.push(roomArea[i]);
+    }
+  }
+  console.log(divChildren);
+  for (let i = 0; i<divChildren.length; i++) {
+    if(i === divChildren.length - 1){
+      newRoomIndex = i-1;
+    } else {
+      newRoomIndex = i+1;
+    }
+  }
+  console.log(divChildren[newRoomIndex]);
+  const selectedRoom = divChildren[newRoomIndex];
+  manager.toggleClass(selectedRoom, 'selected');
+  socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   this.RoomItemFactory.removeRoomItem(result);
 };
 
