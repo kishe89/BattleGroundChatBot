@@ -205,29 +205,19 @@ MessageRenderer.prototype.renderRoomItem = function (roomList,room) {
 MessageRenderer.prototype.addLeaveRoomListener = function (result, socket) {
   const ClassManager = require('../services/cssHandler/ClassManager');
   const manager = new ClassManager();
-  const roomArea = this.RoomItemFactory.RoomItemList.childNodes;
-  const divChildren = [];
-  let newRoomIndex = '';
+  const roomList = this.RoomItemFactory.RoomItemList.children;
+  const removeRoomIndex = Array.prototype.findIndex.call(roomList, (roomItem) => {
+    return roomItem.id === result._id;
+  });
+  const selectRoom = Array.prototype.find.call(roomList, (roomItem, i) => {
+    console.log('room list length : ' + (roomList.length - 2));
+    console.log('remove room index : ' + removeRoomIndex);
+    return roomList.length - 2 > removeRoomIndex ? i === removeRoomIndex + 1 : i === removeRoomIndex - 1;
+  });
 
-  for (let i = 0; i<roomArea.length; i++){
-    if(roomArea[i].nodeName === 'DIV'){
-      console.log(roomArea[i].nodeName);
-      divChildren.push(roomArea[i]);
-    }
-  }
-  console.log(divChildren);
-  for (let i = 0; i<divChildren.length; i++) {
-    if(i === divChildren.length - 1){
-      newRoomIndex = i-1;
-    } else {
-      newRoomIndex = i+1;
-    }
-  }
-  console.log(divChildren[newRoomIndex]);
-  const selectedRoom = divChildren[newRoomIndex];
-  manager.toggleClass(selectedRoom, 'selected');
-  socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   this.RoomItemFactory.removeRoomItem(result);
+  socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectRoom.id});
+  manager.toggleClass(selectRoom, 'selected');
 };
 
 MessageRenderer.prototype.agoLoadMessageIsResolve = function(result){
