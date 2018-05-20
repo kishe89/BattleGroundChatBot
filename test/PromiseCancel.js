@@ -100,13 +100,13 @@ describe('Promise Cancel',()=>{
       target : undefined,
       task:{}
     };
-    function createCancleAblePromise(element) {
+    function createCancleAblePromise() {
       let reject = undefined;
       let isExcuted = false;
       const promise = new Promise((PromiseResolve, PromiseReject)=>{
 
-        reject = ()=>{
-          PromiseReject('cancel Task target is : '+element);
+        reject = (message)=>{
+          PromiseReject('cancel Task target is : '+message);
         };
         setTimeout(()=>{
           let index;
@@ -137,7 +137,7 @@ describe('Promise Cancel',()=>{
           //실행안된 상태로 이전 작업 취소해야함
           console.log('취소할 작업 '+JSON.stringify(agoTask));
           agoTask.task.isExcuted = true;
-          agoTask.task.reject('client busy so cancel task '+agoTask.target);
+          agoTask.task.reject('client busy so cancel task '+JSON.stringify(agoTask.target));
 
           agoTask.target = element;
           agoTask.task = createCancleAblePromise(element);
