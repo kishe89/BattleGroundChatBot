@@ -206,12 +206,10 @@ MessageRenderer.prototype.addLeaveRoomListener = function (result, socket) {
   const ClassManager = require('../services/cssHandler/ClassManager');
   const manager = new ClassManager();
   const roomList = this.RoomItemFactory.RoomItemList.children;
-  const removeRoomIndex = Array.prototype.findIndex.call(roomList, (roomItem) => {
-    return roomItem.id === result._id;
-  });
   const selectRoom = Array.prototype.find.call(roomList, (roomItem, i) => {
-    console.log('room list length : ' + (roomList.length - 2));
-    console.log('remove room index : ' + removeRoomIndex);
+    const removeRoomIndex = Array.prototype.findIndex.call(roomList, (roomItem) => {
+      return roomItem.id === result._id;
+    });
     return roomList.length - 2 > removeRoomIndex ? i === removeRoomIndex + 1 : i === removeRoomIndex - 1;
   });
 
