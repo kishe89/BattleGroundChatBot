@@ -3,6 +3,7 @@
 function connectToDefault(args,token,url,renderer) {
   let agoConnected = false;
   let roomInitialized = false;
+  let agoTask = undefined;
   const socket = require('socket.io-client')(url,{
     transports: ['websocket'],
     query:{
@@ -58,6 +59,10 @@ function connectToDefault(args,token,url,renderer) {
   socket.on('message-get-in-room-success',(room)=>{
     if(renderer.agoLoadMessageTargetRoom !== room._id) {
       renderer.MessageListView.SwitchRoom(renderer,room);
+
+    }
+    if(agoTask&&!agoTask.isExcuted){
+      agoTask.reject('cancel room load message ');
     }
     renderer.loadParticipant(socket,room)
       .then((result)=>{
@@ -66,9 +71,17 @@ function connectToDefault(args,token,url,renderer) {
       .catch((e)=>{
         console.log(e);
       });
+
     renderer.loadMessage(socket,room)
       .then(renderer.agoLoadMessageIsResolve)
       .catch(renderer.agoLoadMessageIsReject);
+
+    /**
+     * Cancelable Promise Test
+     * @type {{isExcuted, reject, promise}}
+     */
+    // agoTask = renderer.loadMessageCancelablePromise(socket,room);
+    // agoTask.promise.then(renderer.agoLoadMessageIsResolve).catch(renderer.agoLoadMessageIsReject);
   });
 
   socket.on('message-get-in-room-fail',(e)=>{
