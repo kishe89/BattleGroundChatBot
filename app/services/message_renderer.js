@@ -67,6 +67,56 @@ MessageRenderer.prototype.loadMessage = function(socket,room){
     return resolve({MessageRenderer:this,roomId:room._id});
   });
 };
+MessageRenderer.prototype.loadMessageSetImmediate = function(socket,room){
+  return new Promise((resolve,reject)=>{
+    setImmediate(()=>{
+      if(room.messages.length === 0){
+        return reject({MessageRenderer:this,roomId:room._id});
+      }
+      if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
+        return reject({MessageRenderer:this,roomId:room.messages[0].roomId});
+      }
+      console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
+
+      for (let i = 0; i < room.messages.length; i++) {
+        let msg = room.messages[i];
+        socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
+      }
+
+      return resolve({MessageRenderer:this,roomId:room._id});
+    });
+  });
+};
+
+
+MessageRenderer.prototype.loadMessageCancelablePromise = function(socket,room){
+  let isExcuted = false;
+  let reject = undefined;
+  const promise = new Promise((resolve,PromiseReject)=>{
+    reject = ()=>{
+      isExcuted = true;
+      return PromiseReject('cancle');
+    };
+
+    if(room.messages.length === 0){
+      return PromiseReject({MessageRenderer:this,roomId:room._id});
+    }
+    if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
+      return PromiseReject({MessageRenderer:this,roomId:room.messages[0].roomId});
+    }
+    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
+
+    for (let i = 0; i < room.messages.length; i++) {
+      let msg = room.messages[i];
+      socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
+    }
+
+    return resolve({MessageRenderer:this,roomId:room._id});
+  });
+  return {isExcuted,reject,promise};
+};
+
+
 MessageRenderer.prototype.loadParticipant = function (socket, room) {
   const MemberView = require('../services/MemberView');
   return new Promise((resolve,reject)=>{
