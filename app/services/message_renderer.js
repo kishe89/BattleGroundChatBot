@@ -115,45 +115,9 @@ MessageRenderer.prototype.addPrivacyMessageSendListener = function(id, event, so
   });
 };
 MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
-  const self = this;
-  let CreateRoomModal = require('../services/CreateRoomModal');
-  this.document.getElementById(id).addEventListener(event,()=>{
-    const modal = new CreateRoomModal(self.document);
-    modal.showModal();
-    this.document.addEventListener('keydown',(event)=>{
-      const keyName = event.key;
-      if(keyName === 'Escape' && modal !== null){
-        modal.dismissModal();
-      }
-    });
-    this.window.onclick = (event)=>{
-      if (event.target === modal.modal) {
-        modal.dismissModal();
-      }
-    };
-  });
-  this.document.getElementById('modal-input-create').addEventListener(event,createRoomButtonHandler);
-  function createRoomButtonHandler () {
-    const modal = new CreateRoomModal(self.document);
-    if(!modal.RoomNameIsValid()){
-      alert('방이름이 버어있습니다. 방이름은 필수입니다.');
-      return;
-    }
-    if(!modal.RatingIsSelected()) {
-      alert('레이팅선택은 필수입니다.');
-      return;
-    }
-
-    const message = {
-      roomName : modal.getRoomName(),
-      rating : modal.getRating(),
-      token : socket.access_token
-    };
-
-    socket.emit('createRoom',message );
-    self.scrollToBottom('room-area');
-    modal.dismissModal();
-  }
+  const CreateRoomButton = require('../services/CreateRoomButton');
+  const createRoomButton = new CreateRoomButton(this.document,this.window,socket,this);
+  createRoomButton.addClickEventListener();
 };
 MessageRenderer.prototype.addClickEventListener = function(socket) {
   // 생성 된 방 button List element

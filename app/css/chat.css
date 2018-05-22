@@ -140,10 +140,10 @@ body, html {
 .modal-input-rating li input + label:hover {
     background: #5b6aff;
 }
-.modal-input-rating li input.selected + label.selected {
+.modal-input-rating li input.liselected + label.liselected {
     background: #555555;
 }
-.modal-input-rating li input.selected + label.selected:hover {
+.modal-input-rating li input.liselected + label.liselected:hover {
     background: #5b6aff;
 }
 .modal-input-rating.open li input + label {
