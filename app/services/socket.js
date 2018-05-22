@@ -6,14 +6,16 @@
   const MessageRenderer = require('./app/services/message_renderer');
   const Channel = require('./app/services/channel');
   const channel = new Channel();
-  const renderer = new MessageRenderer(document,window);
+  let renderer;
   const ipcRenderer = electron.ipcRenderer;
   let token = undefined;
   let defaultSocket;
   let botSocket;
-  ipcRenderer.on('connect',(event,args)=>{
+  ipcRenderer.on('connect',(event,args,locale)=>{
+    console.log(locale);
     console.log('receive event from ipcMain');
-    defaultSocket = connectToDefault(args,token,channel.DEVELOPMENT_HOST(),renderer);
-    botSocket = connectToBot(args,token,channel.DEVELOPMENT_BOT_CHANNEL(),renderer);
+    renderer = new MessageRenderer(document,window,locale);
+    defaultSocket = connectToDefault(args, token, channel.DEVELOPMENT_HOST(), renderer);
+    botSocket = connectToBot(args, token, channel.DEVELOPMENT_BOT_CHANNEL(), renderer);
   });
 })();

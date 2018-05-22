@@ -1,12 +1,12 @@
 'use strict';
 
-function MessageFactory() {
+function MessageFactory(locale) {
   if(!(this instanceof MessageFactory)){
     throw new TypeError('MessageFactory must be created with new keyword');
   }
   this.moment = require('moment');
   this.utcOffset = this.moment().utcOffset();
-  this.moment.locale('ko');
+  this.moment.locale(locale);
 }
 
 MessageFactory.prototype.createMessageRow = function (document) {
