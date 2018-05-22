@@ -67,26 +67,6 @@ MessageRenderer.prototype.loadMessage = function(socket,room){
     return resolve({MessageRenderer:this,roomId:room._id});
   });
 };
-MessageRenderer.prototype.loadMessageSetImmediate = function(socket,room){
-  return new Promise((resolve,reject)=>{
-    setImmediate(()=>{
-      if(room.messages.length === 0){
-        return reject({MessageRenderer:this,roomId:room._id});
-      }
-      if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
-        return reject({MessageRenderer:this,roomId:room.messages[0].roomId});
-      }
-      console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
-
-      for (let i = 0; i < room.messages.length; i++) {
-        let msg = room.messages[i];
-        socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
-      }
-
-      return resolve({MessageRenderer:this,roomId:room._id});
-    });
-  });
-};
 
 
 MessageRenderer.prototype.loadMessageCancelablePromise = function(socket,room){
@@ -97,21 +77,22 @@ MessageRenderer.prototype.loadMessageCancelablePromise = function(socket,room){
       isExcuted = true;
       return PromiseReject('cancle');
     };
+    setTimeout(()=>{
+      if(room.messages.length === 0){
+        return PromiseReject({MessageRenderer:this,roomId:room._id});
+      }
+      if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
+        return PromiseReject({MessageRenderer:this,roomId:room.messages[0].roomId});
+      }
+      console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
 
-    if(room.messages.length === 0){
-      return PromiseReject({MessageRenderer:this,roomId:room._id});
-    }
-    if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
-      return PromiseReject({MessageRenderer:this,roomId:room.messages[0].roomId});
-    }
-    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
+      for (let i = 0; i < room.messages.length; i++) {
+        let msg = room.messages[i];
+        socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
+      }
 
-    for (let i = 0; i < room.messages.length; i++) {
-      let msg = room.messages[i];
-      socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
-    }
-
-    return resolve({MessageRenderer:this,roomId:room._id});
+      return resolve({MessageRenderer:this,roomId:room._id});
+    },50);
   });
   return {isExcuted,reject,promise};
 };
@@ -178,9 +159,6 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
   }
 };
 MessageRenderer.prototype.addClickEventListener = function(socket) {
-  const roomActionBar = this.RoomActionBar;
-  const ClassManager = require('../services/cssHandler/ClassManager');
-  const manager = new ClassManager();
   const self = this;
   // 생성 된 방 button List element
   const rooms = document.getElementsByClassName('room-item');
@@ -197,9 +175,7 @@ MessageRenderer.prototype.addClickEventListener = function(socket) {
     }else{
       return;
     }
-
     const selectedRoom = event.srcElement.parentNode;
-    manager.toggleClass(selectedRoom, 'selected');
     socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
   }
 };
