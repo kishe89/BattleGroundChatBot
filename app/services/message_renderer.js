@@ -1,6 +1,6 @@
 'use strict';
 
-function MessageRenderer(document,window) {
+function MessageRenderer(document,window,locale) {
   if(!(this instanceof MessageRenderer)){
     throw new TypeError('MessageRenderer must be created with new keyword');
   }
@@ -10,8 +10,9 @@ function MessageRenderer(document,window) {
   const MessageListView = require('../services/MessageListView');
   this.document = document;
   this.window = window;
+  this.locale = locale;
   this.messageType = require('../services/message_type');
-  this.MessageFactory = new MessageFactory();
+  this.MessageFactory = new MessageFactory(locale);
   this.RoomItemFactory = new RoomItemFactory(document);
   this.RoomActionBar = new RoomActionBar(document);
   this.MessageListView = new MessageListView(document);
@@ -167,7 +168,7 @@ MessageRenderer.prototype.sendPrivacyMessage = function(socket){
   const textBox = this.document.getElementById('messageInput');
   const moment = require('moment');
   const utcOffset = moment().utcOffset();
-  moment.locale('ko');
+  moment.locale(this.locale);
   // textbox 공백 체크 후에 메세지 전송 및 render 처리
   if(textBox.value !== '') {
     let msg = textBox.value;

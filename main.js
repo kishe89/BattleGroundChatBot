@@ -9,6 +9,7 @@ const FBManager = require('./main/fbmanager');
 const fbManager = new FBManager(app,axios,path,fs,FB);
 
 let win;
+let locale;
 
 function createAuthWindow() {
   fbManager.login(win,BrowserWindow);
@@ -16,7 +17,7 @@ function createAuthWindow() {
 
 function createLoginWindow() {
   const {width,height}= electron.screen.getPrimaryDisplay().workAreaSize;
-
+  locale = app.getLocale();
   /**
    * @TODO mobile, desktop 별 modal 화면 크기 조정 별도 로직 필요
    */
@@ -105,7 +106,8 @@ ipcMain.on('changeView',(event,id)=>{
   win.setResizable(true);
   win.setFullScreenable(true);
   win.webContents.on('did-finish-load',()=>{
-    win.webContents.send('connect',id);
+    console.log(locale);
+    win.webContents.send('connect',id,locale);
   });
 });
 
