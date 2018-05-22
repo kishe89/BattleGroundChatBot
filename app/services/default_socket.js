@@ -72,16 +72,16 @@ function connectToDefault(args,token,url,renderer) {
         console.log(e);
       });
 
-    renderer.loadMessage(socket,room)
-      .then(renderer.agoLoadMessageIsResolve)
-      .catch(renderer.agoLoadMessageIsReject);
+    // renderer.loadMessage(socket,room)
+    //   .then(renderer.agoLoadMessageIsResolve)
+    //   .catch(renderer.agoLoadMessageIsReject);
 
     /**
      * Cancelable Promise Test
      * @type {{isExcuted, reject, promise}}
      */
-    // agoTask = renderer.loadMessageCancelablePromise(socket,room);
-    // agoTask.promise.then(renderer.agoLoadMessageIsResolve).catch(renderer.agoLoadMessageIsReject);
+    agoTask = renderer.loadMessageCancelablePromise(socket,room);
+    agoTask.promise.then(renderer.agoLoadMessageIsResolve).catch(renderer.agoLoadMessageIsReject);
   });
 
   socket.on('message-get-in-room-fail',(e)=>{
