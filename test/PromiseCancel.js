@@ -37,10 +37,8 @@ describe('Promise Cancel',()=>{
   });
   it('for loop test',()=>{
     let index;
-    for(index = 0; index < 100000; index++){
-      console.log(index);
-    }
-    assert.deepEqual(index,100000,'Not Matched index');
+    for(index = 0; index < 100; index++)
+    assert.deepEqual(index,100,'Not Matched index');
   });
   it('Promise initialize test',(done)=>{
     const task = new Promise((resolve, reject)=>{
