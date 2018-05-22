@@ -14,7 +14,7 @@ function CreateRoomModal(document) {
       return document.getElementById('modal-input-roomName').value;
     },
     getRating:()=>{
-      return document.getElementsByClassName('selected')[1].innerText.split('점')[0] * 1;
+      return document.getElementsByClassName('liselected')[1].innerText.split('점')[0] * 1;
     }
   };
   const showModal = this.showModal;
@@ -22,17 +22,18 @@ function CreateRoomModal(document) {
   const toggleOptions = this.toggleOptions;
   const rotate = this.rotate;
   const ratingClickEventHandler = this.ratingClickEventHandler;
-
+  const inputCreateButton = document.getElementById('modal-input-create');
   return {
     modal:modal,
     rating_ul:rating_ul,
     modal_input_rating:modal_input_rating,
     ratingDiv:ratingDiv,
+    inputCreateButton: inputCreateButton,
     toggleOptions:toggleOptions,
     rotate:rotate,
     ratingClickEventHandler:ratingClickEventHandler,
     RatingIsSelected:()=>{
-      const ratingInput = document.getElementsByClassName('selected');
+      const ratingInput = document.getElementsByClassName('liselected');
       return ratingInput.length !== 0;
     },
     getRoomName:getter.getRoomName,
@@ -63,8 +64,8 @@ CreateRoomModal.prototype.dismissModal = function () {
     if (index % 2 !== 0) {
       node.style.transform = 'none';
       node.childNodes[3].removeEventListener('click', self.ratingClickEventHandler);
-      node.childNodes[1].classList.remove('selected');
-      node.childNodes[3].classList.remove('selected');
+      node.childNodes[1].classList.remove('liselected');
+      node.childNodes[3].classList.remove('liselected');
     }
   });
 };
@@ -73,8 +74,8 @@ CreateRoomModal.prototype.ratingClickEventHandler = function(item) {
   const classManager = new ClassManager();
   const string = item.srcElement.childNodes[0].data;
   console.log(string.split('점')[0]);
-  classManager.toggleClass(item.srcElement.childNodes[0].parentNode.control,'selected');
-  classManager.toggleClass(item.srcElement.childNodes[0].parentNode,'selected');
+  classManager.toggleClass(item.srcElement.childNodes[0].parentNode.control,'liselected');
+  classManager.toggleClass(item.srcElement.childNodes[0].parentNode,'liselected');
 };
 CreateRoomModal.prototype.toggleOptions = function() {
   const self = this;
