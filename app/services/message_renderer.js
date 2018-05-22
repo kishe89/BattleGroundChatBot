@@ -22,7 +22,6 @@ function MessageRenderer(document,window) {
 MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const joinRoomList = socket.user.JoinRoomList;
-  const self = this;// message_renderer
   const roomActionBar = this.RoomActionBar;
   roomActionBar.InitializeActionBar(socket);
   /**
@@ -34,20 +33,17 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
 
   for(let i=0; i < joinRoomList.length; i++){
     const roomItem= this.renderRoomItem(roomList,joinRoomList[i]);
-    roomItem.room_item_div.addEventListener('click', loadRoomInfo);
+    roomItem.room_item_div.addEventListener('click', this.loadRoomInfo.bind(this,socket));
   }
-
-  function loadRoomInfo(event) {
-    if(self.agoLoadMessageIsExcuted){
-      self.agoLoadMessageIsExcuted = false;
-    }else{
-      return;
-    }
-
-    const selectedRoom = event.srcElement.parentNode;
-
-    socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
+};
+MessageRenderer.prototype.loadRoomInfo = function (socket, event) {
+  if(this.agoLoadMessageIsExcuted){
+    this.agoLoadMessageIsExcuted = false;
+  }else{
+    return;
   }
+  const selectedRoom = event.srcElement.parentNode;
+  socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
 };
 MessageRenderer.prototype.loadMessage = function(socket,room){
   return new Promise((resolve,reject)=>{
@@ -159,25 +155,12 @@ MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
   }
 };
 MessageRenderer.prototype.addClickEventListener = function(socket) {
-  const self = this;
   // 생성 된 방 button List element
   const rooms = document.getElementsByClassName('room-item');
   // 마지막으로 생성 된 방
   const lastRoom = rooms.item(rooms.length - 1);
-
   // 방 button click시에 click 된 방의 id 및 접속 유저 정보(access_token) 전송
-  lastRoom.addEventListener('click', loadRoomInfo);
-
-  // must refactoring!!
-  function loadRoomInfo(event) {
-    if(self.agoLoadMessageIsExcuted){
-      self.agoLoadMessageIsExcuted = false;
-    }else{
-      return;
-    }
-    const selectedRoom = event.srcElement.parentNode;
-    socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
-  }
+  lastRoom.addEventListener('click', this.loadRoomInfo.bind(this,socket));
 };
 
 MessageRenderer.prototype.sendPrivacyMessage = function(socket){
