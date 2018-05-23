@@ -24,5 +24,10 @@ MessageListView.prototype.RemoveAllMessages = function () {
     this.view.removeChild(this.view.firstChild);
   }
 };
-
+MessageListView.prototype.scrollToBottom = function () {
+  this.view.scrollTop = this.view.scrollHeight;
+};
+MessageListView.prototype.scrollToTop = function () {
+  this.view.scrollTop = this.view.scrollHeight-this.view.scrollHeight;
+};
 module.exports = MessageListView;

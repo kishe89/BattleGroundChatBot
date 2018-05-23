@@ -46,25 +46,6 @@ MessageRenderer.prototype.loadRoomInfo = function (socket, event) {
   const selectedRoom = event.srcElement.parentNode;
   socket.emit('message-get-in-room', {token:socket.access_token,room_id:selectedRoom.id});
 };
-MessageRenderer.prototype.loadMessage = function(socket,room){
-  return new Promise((resolve,reject)=>{
-    if(room.messages.length === 0){
-      return reject({MessageRenderer:this,roomId:room._id});
-    }
-    if(this.agoLoadMessageTargetRoom === room.messages[0].roomId) {
-      return reject({MessageRenderer:this,roomId:room.messages[0].roomId});
-    }
-    console.log('load Message : '+this.agoLoadMessageTargetRoom+'||'+room.messages[0].roomId);
-
-    for (let i = 0; i < room.messages.length; i++) {
-      let msg = room.messages[i];
-      socket.user._id === msg.author._id? this.renderMessage(msg, this.messageType.MY_MESSAGE,socket.args.picture):this.renderMessage(msg, this.messageType.ANOTHER_MESSAGE);
-    }
-
-    return resolve({MessageRenderer:this,roomId:room._id});
-  });
-};
-
 
 MessageRenderer.prototype.loadMessageCancelablePromise = function(socket,room){
   let isExcuted = false;
@@ -223,20 +204,9 @@ MessageRenderer.prototype.renderMessage = function (message, type, image) {
         break;
     }
 
-    self.scrollToBottom('message-area');
+    this.MessageListView.scrollToBottom();
     return myMessageRow;
 };
 
-// Mesaage view scroll to bottom after receive message.
-MessageRenderer.prototype.scrollToBottom = function (elementId) {
-  const messageArea = this.document.getElementById(elementId);
-  messageArea.scrollTop = messageArea.scrollHeight;
-};
-
-
-MessageRenderer.prototype.scrollToTop = function (elementId) {
-  const messageArea = this.document.getElementById(elementId);
-  messageArea.scrollTop = messageArea.scrollHeight-messageArea.scrollHeight;
-};
 
 module.exports = MessageRenderer;
