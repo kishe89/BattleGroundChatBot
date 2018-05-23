@@ -207,8 +207,13 @@ body, html {
     display: block;
     overflow: auto;
     width: 100%;
+    top:0;
     height: calc(100% - 60px); /*message-area 내에서 메시지를 제외한 영역 부분 빼줘야함*/
     background: darkslategray;
+    transition: top 1s;
+}
+.message-area.unfold{
+    top:120px;
 }
 
 .my-message-block {
