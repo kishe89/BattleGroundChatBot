@@ -24,7 +24,7 @@ MessageRenderer.prototype.loadRoomList = function(id, socket) {
   const roomList = document.getElementById(id);
   const joinRoomList = socket.user.JoinRoomList;
   const roomActionBar = this.RoomActionBar;
-  roomActionBar.InitializeActionBar(socket);
+  roomActionBar.InitializeActionBar(socket,this.MessageListView);
   /**
    * @description This condition explains that there is no need to reload.
    */

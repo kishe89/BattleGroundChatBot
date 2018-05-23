@@ -12,20 +12,21 @@ function RoomActionBar(document) {
   this.EVENT = 'click';
 };
 
-RoomActionBar.prototype.InitializeActionBar = function (socket) {
+RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) {
   const self = this;
   this.removeAction().addEventListener(this.EVENT,this.ActionBarEventHandller);
-  removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler);
+  removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler.bind(null,MessageListView));
   self.ActionLeaveRoomButton.addEventListener(self.EVENT, removeRoomInfo);
   function removeEventHandler() {
     self.RoomActionBarFoldButton.removeEventListener(self.EVENT,ButtonClickEventHandler);
     return self.RoomActionBarFoldButton;
   };
-  function ButtonClickEventHandler(event) {
+  function ButtonClickEventHandler(MessageListView,event) {
     const ClassManager = require('../services/cssHandler/ClassManager');
     const manager = new ClassManager();
     manager.toggleClass(self.ActionBar,'unfold');
     manager.toggleClass(event.srcElement,'unfold');
+    manager.toggleClass(MessageListView.view,'unfold');
   };
   function removeRoomInfo(){
     const selectRoom = document.getElementsByClassName('room-item selected');
