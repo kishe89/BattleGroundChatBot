@@ -5,6 +5,7 @@ function RoomActionBar(document) {
     throw new TypeError('RoomActionBar must be created with new keyword');
   }
   const MemberListView = require('../services/MemberListView');
+  this.document = document;
   this.ActionBar = document.getElementById('RoomActionBar');
   this.MemberListView = new MemberListView(document);
   this.RoomActionBarFoldButton = document.getElementById('RoomActionBar-fold-button');
@@ -14,6 +15,8 @@ function RoomActionBar(document) {
 
 RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) {
   const self = this;
+  const inputWrapper = this.document.querySelector('.input-wrapper');
+  console.log(inputWrapper);
   this.removeAction().addEventListener(this.EVENT,this.ActionBarEventHandller);
   removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler.bind(null,MessageListView));
   self.ActionLeaveRoomButton.addEventListener(self.EVENT, removeRoomInfo);
@@ -27,6 +30,8 @@ RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) 
     manager.toggleClass(self.ActionBar,'unfold');
     manager.toggleClass(event.srcElement,'unfold');
     manager.toggleClass(MessageListView.view,'unfold');
+    manager.toggleClass(inputWrapper,'unfold');
+
   };
   function removeRoomInfo(){
     const selectRoom = document.getElementsByClassName('room-item selected');
