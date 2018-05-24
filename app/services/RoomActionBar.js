@@ -16,7 +16,7 @@ function RoomActionBar(document) {
 RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) {
   const self = this;
   const inputWrapper = this.document.querySelector('.input-wrapper');
-  console.log(inputWrapper);
+
   this.removeAction().addEventListener(this.EVENT,this.ActionBarEventHandller);
   removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler.bind(null,MessageListView));
   self.ActionLeaveRoomButton.addEventListener(self.EVENT, removeRoomInfo);
