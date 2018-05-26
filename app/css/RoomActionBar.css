@@ -7,7 +7,7 @@
     width:calc(100% - 100px);    /*-100px is RoomArea width*/
     height: 0;
     visibility: visible;
-    border-radius: 0%;
+    border-radius: 0;
     transition: height 0.8s;
 }
 .RoomActionBar.unfold{
@@ -20,7 +20,7 @@
     z-index: 4;
     width: 45px;
     height: 20px;
-    top: 0px;
+    top: 0;
     margin-left: calc(50% - 73px);
     margin-right: calc(50% - 70px);
     background:#5168d0;
@@ -52,7 +52,7 @@
 }
 .MemberView{
     float: left;
-    padding:relative;
+    position:relative;
     width: 70px;
     height: 60px;
 }
@@ -67,7 +67,7 @@
     width: 50px;
     height: 50px;
     margin: 0 auto;
-    border-width: 0px;
+    border-width: 0;
     border-radius: 50%;
     background-size: cover;
     display: block;
@@ -89,7 +89,7 @@
     /*max-width:60px;*/
     height: 50px;
     margin: 5px 2.5%;
-    border-width: 0px;
+    border-width: 0;
     border-radius: 4px;
     text-align: center;
     line-height: 50px;
@@ -115,7 +115,8 @@
     background-size: contain;
 }
 .action-button.voice{
-    background: #8f8f8f;
+    background: url("../../public/images/call-button-default.png") no-repeat center;
+    background-size: contain;
 }
 .action-button.options{
     background: #8f8f8f;
@@ -144,10 +145,15 @@
     background-size: contain;
 }
 .action-button.voice:hover{
-    background: #2d248f;
+    background: url("../../public/images/call-button-hover.png") no-repeat center;
+    background-size: contain;
+}
+.action-button.voice:hover .tooltip{
+    visibility: visible;
 }
 .action-button.voice:active{
-    background: #8f3323;
+    background: url("../../public/images/call-button-click.png") no-repeat center;
+    background-size: contain;
 }
 .action-button.options:hover{
     background: #2d248f;
