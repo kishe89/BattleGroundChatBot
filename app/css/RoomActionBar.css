@@ -89,18 +89,65 @@
     /*max-width:60px;*/
     height: 50px;
     margin: 5px 2.5%;
+    border-width: 0px;
+    border-radius: 4px;
     text-align: center;
     line-height: 50px;
 }
 .action-button.invite{
-    background: #8f8f8f;
+    background: url("../../public/images/add-user-button-default.png") no-repeat center;
+    background-size: contain;
 }
 .action-button.leave{
     background: #8f8f8f;
 }
-.action-button:hover{
+.action-button.voice{
+    background: #8f8f8f;
+}
+.action-button.options{
+    background: #8f8f8f;
+}
+.action-button.invite:hover{
+    background: url("../../public/images/add-user-button-hover.png") no-repeat center;
+    background-size: contain;
+}
+.action-button.invite .tooltip{
+    display: inline;
+    position: relative;
+    left: 35%;
+    visibility: hidden;
+    width: 100%;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+}
+
+.action-button.invite:hover .tooltip{
+    visibility: visible;
+}
+
+.action-button.invite:active{
+    background: url("../../public/images/add-user-button-click.png") no-repeat center;
+    background-size: contain;
+}
+
+.action-button.leave:hover{
     background: #2d248f;
 }
-.action-button:active{
+.action-button.leave:active{
+    background: #8f3323;
+}
+.action-button.voice:hover{
+    background: #2d248f;
+}
+.action-button.voice:active{
+    background: #8f3323;
+}
+.action-button.options:hover{
+    background: #2d248f;
+}
+.action-button.options:active{
     background: #8f3323;
 }
