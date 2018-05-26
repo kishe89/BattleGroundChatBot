@@ -94,24 +94,7 @@
     text-align: center;
     line-height: 50px;
 }
-.action-button.invite{
-    background: url("../../public/images/add-user-button-default.png") no-repeat center;
-    background-size: contain;
-}
-.action-button.leave{
-    background: #8f8f8f;
-}
-.action-button.voice{
-    background: #8f8f8f;
-}
-.action-button.options{
-    background: #8f8f8f;
-}
-.action-button.invite:hover{
-    background: url("../../public/images/add-user-button-hover.png") no-repeat center;
-    background-size: contain;
-}
-.action-button.invite .tooltip{
+.action-button .tooltip{
     display: inline;
     position: relative;
     left: 35%;
@@ -123,21 +106,42 @@
     border-radius: 6px;
     padding: 5px 0;
 }
-
+.action-button.invite{
+    background: url("../../public/images/add-user-button-default.png") no-repeat center;
+    background-size: contain;
+}
+.action-button.leave{
+    background: url("../../public/images/room-exit-button-default.png") no-repeat center;
+    background-size: contain;
+}
+.action-button.voice{
+    background: #8f8f8f;
+}
+.action-button.options{
+    background: #8f8f8f;
+}
+.action-button.invite:hover{
+    background: url("../../public/images/add-user-button-hover.png") no-repeat center;
+    background-size: contain;
+}
 .action-button.invite:hover .tooltip{
     visibility: visible;
 }
-
 .action-button.invite:active{
     background: url("../../public/images/add-user-button-click.png") no-repeat center;
     background-size: contain;
 }
 
 .action-button.leave:hover{
-    background: #2d248f;
+    background: url("../../public/images/room-exit-button-hover.png") no-repeat center;
+    background-size: contain;
+}
+.action-button.leave:hover .tooltip{
+    visibility: visible;
 }
 .action-button.leave:active{
-    background: #8f3323;
+    background: url("../../public/images/room-exit-button-click.png") no-repeat center;
+    background-size: contain;
 }
 .action-button.voice:hover{
     background: #2d248f;
