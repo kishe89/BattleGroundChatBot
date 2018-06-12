@@ -10,7 +10,9 @@ function RoomActionBar(document) {
   this.MemberListView = new MemberListView(document);
   this.RoomActionBarFoldButton = document.getElementById('RoomActionBar-fold-button');
   this.ActionLeaveRoomButton = document.getElementById('action-leave-room');
+  this.ActionListView = document.getElementById('action-area');
   this.EVENT = 'click';
+  this.ANIMATE_CLASS = 'unfold';
 };
 
 RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) {
@@ -27,10 +29,12 @@ RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) 
   function ButtonClickEventHandler(MessageListView,event) {
     const ClassManager = require('../services/cssHandler/ClassManager');
     const manager = new ClassManager();
-    manager.toggleClass(self.ActionBar,'unfold');
-    manager.toggleClass(event.srcElement,'unfold');
-    manager.toggleClass(MessageListView.view,'unfold');
-    manager.toggleClass(inputWrapper,'unfold');
+    manager.toggleClass(self.ActionBar,self.ANIMATE_CLASS);
+    manager.toggleClass(event.srcElement,self.ANIMATE_CLASS);
+    manager.toggleClass(MessageListView.view,self.ANIMATE_CLASS);
+    manager.toggleClass(inputWrapper,self.ANIMATE_CLASS);
+    manager.toggleClass(self.ActionListView,self.ANIMATE_CLASS);
+    manager.toggleClass(self.MemberListView.view,self.ANIMATE_CLASS);
 
   };
   function removeRoomInfo(){
