@@ -1,15 +1,15 @@
 'use strict';
 
-function CreateRoomButton(document,window,socket,renderer) {
+function CreateRoomButton(document,window,socket) {
   if(!(this instanceof CreateRoomButton)){
     throw new TypeError('CreateRoomButton must be created with new keyword');
   }
   this.view = document.getElementById('createRoom');
   this.document = document;
+  this.roomArea = document.getElementById('room-area');
   this.window = window;
   this.socket = socket;
   this.CreateRoomModal = require('../services/CreateRoomModal');
-  this.renderer = renderer;
   this.modal = new this.CreateRoomModal(this.document);
   this.InputCreateButtonHandler = this.addInputCreateButtonHandler.bind(this,this.modal,this.socket);
 }
@@ -60,8 +60,10 @@ CreateRoomButton.prototype.addInputCreateButtonHandler = function (modal,socket)
     token : socket.access_token
   };
   socket.emit('createRoom',message );
-  this.renderer.scrollToBottom('room-area');
+  this.scrollToBottom();
   modal.dismissModal();
 };
-
+CreateRoomButton.prototype.scrollToBottom = function () {
+  this.roomArea.scrollTop = this.roomArea.scrollHeight;
+};
 module.exports = CreateRoomButton;

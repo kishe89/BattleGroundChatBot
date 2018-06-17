@@ -1,0 +1,32 @@
+.invite-user-modal{
+    display: block;
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+    min-width: 400px;
+    max-width: 400px;
+    height: 400px;
+    background: #00585e;
+    border: solid 1px #444444;
+    top:50%;
+    left:calc(50% - 201px); /* 전체 width/2 -(modal width 절반 + border width)*/
+    margin: -200px auto auto;
+    box-shadow: 0px 0px 10px #333333;
+}
+#invite-user-input-id{
+    display: block;
+    position: relative;
+    margin: 15px auto;
+    border: 0px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 15px;
+    width: 98%;
+    height: 30px;
+    color: #fefefe;
+    background: #323232;
+}
+
+.invite-user-modal.show{
+    visibility: visible;
+}

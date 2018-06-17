@@ -97,7 +97,7 @@ MessageRenderer.prototype.addPrivacyMessageSendListener = function(id, event, so
 };
 MessageRenderer.prototype.addCreateRoomListener = function (id, event, socket) {
   const CreateRoomButton = require('../services/CreateRoomButton');
-  const createRoomButton = new CreateRoomButton(this.document,this.window,socket,this);
+  const createRoomButton = new CreateRoomButton(this.document,this.window,socket);
   createRoomButton.addClickEventListener();
 };
 MessageRenderer.prototype.addClickEventListener = function(socket) {

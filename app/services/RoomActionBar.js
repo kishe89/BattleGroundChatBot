@@ -5,12 +5,13 @@ function RoomActionBar(document) {
     throw new TypeError('RoomActionBar must be created with new keyword');
   }
   const MemberListView = require('../services/MemberListView');
+  const ActionListView = require('../services/ActionListView');
   this.document = document;
   this.ActionBar = document.getElementById('RoomActionBar');
   this.MemberListView = new MemberListView(document);
   this.RoomActionBarFoldButton = document.getElementById('RoomActionBar-fold-button');
   this.ActionLeaveRoomButton = document.getElementById('action-leave-room');
-  this.ActionListView = document.getElementById('action-area');
+  this.ActionListView = new ActionListView(document);
   this.EVENT = 'click';
   this.ANIMATE_CLASS = 'unfold';
 };
@@ -18,7 +19,7 @@ function RoomActionBar(document) {
 RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) {
   const self = this;
   const inputWrapper = this.document.querySelector('.input-wrapper');
-
+  this.ActionListView.Initialize();
   this.removeAction().addEventListener(this.EVENT,this.ActionBarEventHandller);
   removeEventHandler().addEventListener(this.EVENT,ButtonClickEventHandler.bind(null,MessageListView));
   self.ActionLeaveRoomButton.addEventListener(self.EVENT, removeRoomInfo);
@@ -33,7 +34,7 @@ RoomActionBar.prototype.InitializeActionBar = function (socket,MessageListView) 
     manager.toggleClass(event.srcElement,self.ANIMATE_CLASS);
     manager.toggleClass(MessageListView.view,self.ANIMATE_CLASS);
     manager.toggleClass(inputWrapper,self.ANIMATE_CLASS);
-    manager.toggleClass(self.ActionListView,self.ANIMATE_CLASS);
+    manager.toggleClass(self.ActionListView.getView(),self.ANIMATE_CLASS);
     manager.toggleClass(self.MemberListView.view,self.ANIMATE_CLASS);
 
   };
