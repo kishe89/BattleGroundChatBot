@@ -3,11 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>배틀그라운드 마스터</title>
-    <link rel="stylesheet" type="text/css" href="./app/css/chat.css" />
-    <link rel="stylesheet" type="text/css" href="./app/css/RoomActionBar.css" />
+    <link rel="stylesheet" type="text/css" href="./app/css/chat.css" >
+    <link rel="stylesheet" type="text/css" href="./app/css/RoomActionBar.css">
     <link rel="stylesheet" type="text/css" href="./app/css/RoomArea.css">
+    <link rel="stylesheet" type="text/css" href="./app/css/InviteButton.css">
+    <link rel="stylesheet" type="text/css" href="./app/css/InviteDialog.css">
 </head>
 <body>
+<!-- Invite Modal-->
+<div class="invite-user-modal" id="invite-user-modal">
+    <input id="invite-user-input-id" placeholder="초대할 유저의 아이디를 입력해주세요."/>
+    <div class="invite-user-action-list">
+        <div class="invite-action-button" id="invite-button">
+            초대
+        </div>
+        <div class="invite-action-button" id="cancel-button">
+            취소
+        </div>
+    </div>
+</div>
+
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
